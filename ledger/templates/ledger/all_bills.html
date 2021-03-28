@@ -1,0 +1,27 @@
+{% extends "ledger/base.html" %}
+{% block header %}
+    <!DOCTYPE html>
+    <html lang="zh">
+    <head>
+        <meta charset="UTF-8">
+        <title>所有账单</title>
+    </head>
+{% endblock header %}
+{% block content %}
+    <body>
+    <div class="list-group">
+        <a href="#" class="list-group-item list-group-item-action active" aria-current="true">默认账本</a>
+        <a href="{% url "ledger:details" %}" class="list-group-item list-group-item-action">第一条账单</a>
+        <a href="#" class="list-group-item list-group-item-action">第二条账单</a>
+        <a href="#" class="list-group-item list-group-item-action">第三条账单</a>
+        <a href="#" class="list-group-item list-group-item-action">第四条账单</a>
+        <a href="#" class="list-group-item list-group-item-action">第五条账单</a>
+    </div>
+    <br><br>
+    <div>
+        <span class="border border-5">本月总支出：</span><br><br>
+        <span class="border border-5">本月总收入：</span>
+    </div>
+    </body>
+{% endblock content %}
+</html>

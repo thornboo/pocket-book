@@ -1,0 +1,33 @@
+{% extends "ledger/base.html" %}
+{% block header %}
+    <!DOCTYPE html>
+    <html lang="zh">
+    <head>
+        <meta charset="UTF-8">
+        <title>index</title>
+        <style>
+            a {
+                text-decoration: none;
+                color: #333;
+                font-weight: bolder;
+            }
+            .btn_first {
+                text-decoration: none;
+                text-align: center;
+                color: #333;
+            }
+        </style>
+    </head>
+{% endblock header %}
+{% block content %}
+    <body>
+    <div>
+        <br><br>
+        <h2 style="text-align: center; color: #e3a53b">欢迎使用记账本！</h2>
+    </div>
+    <div class="p-3 mb-2 bg-warning text-dark btn_first"><a href="#">记一笔</a></div>
+    <div class="p-3 mb-2 bg-success text-white">其他展示信息</div>
+    <div class="p-3 mb-2 bg-primary text-white">其他展示信息</div>
+    </body>
+    </html>
+{% endblock content %}

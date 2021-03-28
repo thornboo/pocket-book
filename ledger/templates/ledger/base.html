@@ -1,0 +1,88 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>记账本</title>
+    <!--引入bootstrap-->
+    <link rel="stylesheet" href="../../static/bootstrap/bootstrap-5.0.0/css/bootstrap.css">
+    <script src="../../static/bootstrap/jQuery/jquery-3.6.0.js"></script>
+    <script src="../../static/bootstrap/bootstrap-5.0.0/js/bootstrap.bundle.js"></script>
+    <style>
+        .a_btn {
+            text-decoration: none;
+            color: inherit;
+        }
+    </style>
+</head>
+
+<body>
+<! --Static navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url "ledger:index" %}">记账本</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{% url "ledger:index" %}">主页</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url "ledger:chart_overview" %}">图表</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        账单
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="#">一月</a></li>
+                        <li><a class="dropdown-item" href="#">二月</a></li>
+                        <li><a class="dropdown-item" href="#">三月</a></li>
+                        <li><a class="dropdown-item" href="#">四月</a></li>
+                        <li><a class="dropdown-item" href="#">五月</a></li>
+                        <li><a class="dropdown-item" href="#">六月</a></li>
+                        <li><a class="dropdown-item" href="#">七月</a></li>
+                        <li><a class="dropdown-item" href="#">八月</a></li>
+                        <li><a class="dropdown-item" href="#">九月</a></li>
+                        <li><a class="dropdown-item" href="#">十月</a></li>
+                        <li><a class="dropdown-item" href="#">十一月</a></li>
+                        <li><a class="dropdown-item" href="#">十二月</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="{% url "ledger:all_bills" %}">查看账本</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url "ledger:help" %}">FAQ</a>
+                </li>
+            </ul>
+            <form class="d-flex">
+                <a href="../">
+                    <button type="button" class="btn btn-light"><a href="{% url "users:login" %}" class="a_btn">登录</a>
+                    </button>
+                </a>
+                &nbsp;
+                <button type="button" class="btn btn-light"><a href="{% url "users:register" %}" class="a_btn">注册</a>
+                </button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="page-header">
+        {% block header %}{% endblock header %}
+    </div>
+    <div>
+        {% block content %}{% endblock content %}
+    </div>
+</div>
+<! --/.container -->
+</body>
+</html>

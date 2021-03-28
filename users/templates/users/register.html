@@ -1,0 +1,62 @@
+{% extends "ledger/base.html" %}
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>注册账号</title>
+</head>
+<body>
+{% block content %}
+    <form class="row g-3">
+        <div class="col-md-4">
+            <label for="validationDefault01" class="form-label">姓名</label>
+            <input type="text" class="form-control" id="validationDefault01" required>
+        </div>
+        <div class="col-md-4">
+            <label for="validationDefault02" class="form-label">性别</label>
+            <input type="text" class="form-control" id="validationDefault02" required>
+        </div>
+        <div class="col-md-4">
+            <label for="validationDefaultUsername" class="form-label">昵称</label>
+            <div class="input-group">
+                <span class="input-group-text" id="inputGroupPrepend2">@</span>
+                <input type="text" class="form-control" id="validationDefaultUsername"
+                       aria-describedby="inputGroupPrepend2" placeholder="取一个好听的名字吧" required>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <label for="validationDefault04" class="form-label">身份</label>
+            <select class="form-select" id="validationDefault04" required>
+                <option selected disabled value="">下拉选择...</option>
+                <option>学生</option>
+                <option>事业单位</option>
+                <option>商业/企业</option>
+                <option>医护</option>
+                <option>金融/银行</option>
+                <option>互联网</option>
+                <option>广告传媒</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <label for="validationDefault05" class="form-label">邮箱</label>
+            <input type="text" class="form-control" id="validationDefault05" placeholder="方便重置和找回密码" required>
+        </div>
+        <div class="col-md-3">
+            <label for="validationDefault06" class="form-label">电话号码</label>
+            <input type="text" class="form-control" id="validationDefault06" required>
+        </div>
+        <div class="col-12">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="invalidCheck2" required>
+                <label class="form-check-label" for="invalidCheck2">
+                    同意条款和条件
+                </label>
+            </div>
+        </div>
+        <div class="col-12">
+            <button class="btn btn-primary" type="submit">确定提交</button>
+        </div>
+    </form>
+{% endblock content %}
+</body>
+</html>
