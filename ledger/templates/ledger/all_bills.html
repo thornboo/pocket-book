@@ -9,14 +9,51 @@
 {% endblock header %}
 {% block content %}
     <body>
-    <div class="list-group">
-        <a href="#" class="list-group-item list-group-item-action active" aria-current="true">默认账本</a>
-        <a href="{% url "ledger:details" %}" class="list-group-item list-group-item-action">第一条账单</a>
-        <a href="#" class="list-group-item list-group-item-action">第二条账单</a>
-        <a href="#" class="list-group-item list-group-item-action">第三条账单</a>
-        <a href="#" class="list-group-item list-group-item-action">第四条账单</a>
-        <a href="#" class="list-group-item list-group-item-action">第五条账单</a>
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                data-bs-toggle="dropdown" aria-expanded="false">
+            切换账本
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            <li><a class="dropdown-item" href="#">默认账本</a></li>
+            <li><a class="dropdown-item" href="#">新建账本</a></li>
+
+        </ul>
     </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">金额</th>
+            <th scope="col">时间</th>
+            <th scope="col">分类</th>
+            <th scope="col">备注</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th scope="row">1</th>
+            <td>15</td>
+            <td>2021.03.28</td>
+            <td>餐饮</td>
+            <td>早餐</td>
+        </tr>
+        <tr>
+            <th scope="row">2</th>
+            <td>45</td>
+            <td>2021.03.29</td>
+            <td>购物</td>
+            <td>生活用品</td>
+        </tr>
+        <tr>
+            <th scope="row">3</th>
+            <td>30</td>
+            <td>2021.03.30</td>
+            <td>医疗</td>
+            <td>买感冒药</td>
+        </tr>
+        </tbody>
+    </table>
     <br><br>
     <div>
         <span class="border border-5">本月总支出：</span><br><br>

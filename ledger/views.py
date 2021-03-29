@@ -13,19 +13,14 @@ def chart_overview(request):
     return render(request, "ledger/chart_overview.html")
 
 
-# 按月份展示账单
-def month_display(request):
-    return render(request, "ledger/month_display.html")
-
-
 # 展示所有账单信息
 def all_bills(request):
     return render(request, "ledger/all_bills.html")
 
 
-# 单个账单详细页面
-def details(request):
-    return render(request, "ledger/details.html")
+# 记一笔页面
+def record(request):
+    return render(request, "ledger/record.html")
 
 
 # 网站帮助

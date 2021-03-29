@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>记账本</title>
+    <title>Z&Z记账本</title>
     <!--引入bootstrap-->
     <link rel="stylesheet" href="../../static/bootstrap/bootstrap-5.0.0/css/bootstrap.css">
     <script src="../../static/bootstrap/jQuery/jquery-3.6.0.js"></script>
@@ -13,6 +13,7 @@
         .a_btn {
             text-decoration: none;
             color: inherit;
+            font-weight: bolder;
         }
     </style>
 </head>
@@ -21,7 +22,7 @@
 <! --Static navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="{% url "ledger:index" %}">记账本</a>
+        <a class="navbar-brand" href="{% url "ledger:index" %}">Z&Z记账本</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -37,7 +38,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                        data-bs-toggle="dropdown" aria-expanded="false">
-                        账单
+                        月份
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="#">一月</a></li>
@@ -52,10 +53,6 @@
                         <li><a class="dropdown-item" href="#">十月</a></li>
                         <li><a class="dropdown-item" href="#">十一月</a></li>
                         <li><a class="dropdown-item" href="#">十二月</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item" href="{% url "ledger:all_bills" %}">查看账本</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">
