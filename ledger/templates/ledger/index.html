@@ -65,7 +65,8 @@
     <div class="alert alert-success" role="alert">
         本月总收入：
     </div>
-    <button type="button" class="btn btn-outline-success">记一笔</button>
+    <button type="button" class="btn btn-outline-success" onclick="window.location='{% url "ledger:record" %}'">记一笔
+    </button>
     </body>
     </html>
 {% endblock content %}
