@@ -1,39 +1,16 @@
 {% extends "ledger/base.html" %}
-<!doctype html>
-<html lang="en">
-{% block header %}
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport"
-              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Document</title>
-        <style>
-            .size {
-                width: 350px;
-                height: 30px;
-            }
-        </style>
-    </head>
-{% endblock header %}
+
 {% block content %}
-    <div class="container">
-        <div class="col-md-4 col-md-offset-4">
-            <form class='form-login' action="{% url "users:login" %}" method="post">
-                {% csrf_token %}
-                <h2 class="text-center">欢迎登录</h2>
-                <div class="form-group">
-                    <label for="id_username">用户名：</label>
-                    <input type="text" name='username' class="form-control" id="id_username" autofocus required>
-                </div>
-                <div class="form-group">
-                    <label for="id_password">密码：</label>
-                    <input type="password" name='password' class="form-control" id="id_password" required>
-                </div><br>
-                <button type="reset" class="btn btn-default pull-left" style="color: #d21313">重置</button>&nbsp;
-                <button type="submit" class="btn btn-primary pull-right">提交</button>
-            </form>
-        </div>
-    </div> <!-- /container -->
+    {% if form.errors %}
+        <p>请输入你的用户名和密码。</p>
+    {% endif %}
+
+    <form method="post" action="{% url "users:login" %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <button name="submit">登录</button>
+        <input type="hidden" name="next" value="{% url 'ledger:index' %}">
+    </form>
+
 {% endblock %}
-</html>
