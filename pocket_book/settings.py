@@ -123,3 +123,5 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),  # 此处必须，为新添加
 )
+
+LOGIN_URL = '/users/login/'
