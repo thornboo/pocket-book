@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
 
 
+@login_required
 # 网站主页
 def index(request):
     return render(request, "ledger/index.html")
