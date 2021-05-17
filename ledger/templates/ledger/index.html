@@ -21,7 +21,7 @@
             }
 
             th, td {
-                padding: 10px 30px;
+                padding: 10px 70px;
             }
 
             th {
@@ -33,7 +33,7 @@
 {% endblock header %}
 {% block content %}
     <body>
-    <div><br><br>
+    <div style="background-color: #5180c6"><br><br>
         <figure class="text-center">
             <blockquote class="blockquote">
                 <h3>别想一下造出大海，必须先由小河川开始!</h3>
@@ -42,7 +42,19 @@
                 Z&Z<cite title="Source Title">记账</cite>
             </figcaption>
         </figure>
+    </div><br><br>
+
+    <div class="userlist">
+        <table id="ut">
+            <tr>
+                <td>类型</td>
+                <td>时间</td>
+                <td>分类</td>
+                <td>金额</td>
+            </tr>
+        </table>
     </div>
+
     <span class="border border-4">2021年3月</span>
 
     <div class="alert alert-primary" role="alert">
@@ -56,55 +68,93 @@
     </button>
     </body>
 
-    <script>
-        $.ajax({
-            url: "http://127.0.0.1:8000/../../static/data/bill.csv",
-            dataType: 'text',  //指定服务器返回的数据类型
-            success: function (data) {
-                console.log(data);
-            },
-            error: function () {
-                console.log("error:");
-            },
-            complete: function () {
-                console.log("始终执行!");
-            }
-        }).done(successFunction);
 
-        function successFunction(data) {
-            var allRows = data.split(/\r?\n|\r/);  //查找换行和回车
-            var table = '<table>';
-            for (var singleRow = 0; singleRow < allRows.length; singleRow++) {
-                if (singleRow === 0) {
-                    table += '<thead>';
-                    table += '<tr>';
-                } else {
-                    table += '<tr>';
-                }
-                var rowCells = allRows[singleRow].split(',');  //以逗号分割
-                for (var rowCell = 0; rowCell < rowCells.length; rowCell++) {
-                    if (singleRow === 0) {
-                        table += '<th>';
-                        table += rowCells[rowCell];
-                        table += '</th>';
-                    } else {
-                        table += '<td>';
-                        table += rowCells[rowCell];
-                        table += '</td>';
+{#第一种方法#}
+    <script type="text/javascript">
+
+        mtr = document.getElementById("ut");
+
+        //使用ajax加载csv文件的数据
+        $.ajax({
+            url: "http://127.0.0.1:8000/static/data/bill.csv",
+            success: function (result) {
+                frag = document.createDocumentFragment();
+
+                // 对csv文件的数据先以行分割
+                userList = result.split("\n");
+
+                // 我们在对每一行以逗号作分割
+                for (var i = 0; i < userList.length; i++) {
+                    userary = userList[i].split(",");
+                    tr = document.createElement("tr");
+
+                    // 对每行的内容遍历到td标签去
+                    for (j = 0; j < userary.length; j++) {
+                        td = document.createElement("td");
+                        td.append(userary[j]);
+                        tr.appendChild(td);
                     }
+                    frag.appendChild(tr);
                 }
-                if (singleRow === 0) {
-                    table += '</tr>';
-                    table += '</thead>';
-                    table += '<tbody>';
-                } else {
-                    table += '</tr>';
-                }
+
+                // 加载到web页面
+                mtr.appendChild(frag);
             }
-            table += '</tbody>';
-            table += '</table>';
-            $('body').append(table);
-        }
+        });
+
     </script>
+
+
+{#第二种方法#}
+    {#    <script>#}
+    {#        $.ajax({#}
+    {#            url: "http://127.0.0.1:8000/static/data/bill.csv",#}
+    {#            dataType: 'text',  //指定服务器返回的数据类型#}
+    {#            success: function (data) {#}
+    {#                console.log(data);#}
+    {#            },#}
+    {#            error: function () {#}
+    {#                console.log("error:");#}
+    {#            },#}
+    {#            complete: function () {#}
+    {#                console.log("始终执行!");#}
+    {#            }#}
+    {#        }).done(successFunction);#}
+    {##}
+    {#        function successFunction(data) {#}
+    {#            var allRows = data.split(/\r?\n|\r/);  //查找换行和回车#}
+    {#            var table = '<table>';#}
+    {#            for (var singleRow = 0; singleRow < allRows.length; singleRow++) {#}
+    {#                if (singleRow === 0) {#}
+    {#                    table += '<thead>';#}
+    {#                    table += '<tr>';#}
+    {#                } else {#}
+    {#                    table += '<tr>';#}
+    {#                }#}
+    {#                var rowCells = allRows[singleRow].split(',');  //以逗号分割#}
+    {#                for (var rowCell = 0; rowCell < rowCells.length; rowCell++) {#}
+    {#                    if (singleRow === 0) {#}
+    {#                        table += '<th>';#}
+    {#                        table += rowCells[rowCell];#}
+    {#                        table += '</th>';#}
+    {#                    } else {#}
+    {#                        table += '<td>';#}
+    {#                        table += rowCells[rowCell];#}
+    {#                        table += '</td>';#}
+    {#                    }#}
+    {#                }#}
+    {#                if (singleRow === 0) {#}
+    {#                    table += '</tr>';#}
+    {#                    table += '</thead>';#}
+    {#                    table += '<tbody>';#}
+    {#                } else {#}
+    {#                    table += '</tr>';#}
+    {#                }#}
+    {#            }#}
+    {#            table += '</tbody>';#}
+    {#            table += '</table>';#}
+    {#            $('body').append(table);#}
+    {#        }#}
+    {#    </script>#}
     </html>
 {% endblock content %}
