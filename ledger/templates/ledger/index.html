@@ -1,42 +1,34 @@
 {% extends "ledger/base.html" %}
+{% load static %}
 {% block header %}
     <!DOCTYPE html>
     <html lang="zh">
     <head>
         <meta charset="UTF-8">
-        <title>index</title>
+        <title>记账本</title>
         <script src="../../static/bootstrap/jQuery/jquery-3.6.0.js" type="text/javascript"></script>
-        <script type="text/javascript">
-            mtr = document.getElementById("dt");
 
-            //使用ajax加载csv文件的数据
-            $.ajax({
-                url: "http://localhost：8000/bill.csv", //应该写相对路径
-                dataType: "csv",
-                success: function (result) {
-                    frag = document.createDocumentFragment();
+        <style>
+            table {
+                margin: 0 auto;
+                text-align: center;
+                border-collapse: collapse;
+                border: 1px solid #d4d4d4;
+            }
 
-                    // 对csv文件的数据先以行分割
-                    datalist = result.split("\n");
+            tr:nth-child(even) {
+                background: #d4d4d4;
+            }
 
-                    // 我们再对每一行以逗号作分割
-                    for (i = 0; i < datalist.length; i++) {
-                        userary = datalist[i].split(",");
-                        tr = document.createElement("tr");
+            th, td {
+                padding: 10px 30px;
+            }
 
-                        // 对每行的内容遍历到td标签去
-                        for (j = 0; j < userary.length; j++) {
-                            td = document.createElement("td");
-                            td.append(userary[j]);
-                            tr.appendChild(td);
-                        }
-                        frag.appendChild(tr);
-                    }
-                    // 加载到web页面
-                    mtr.appendChild(frag);
-                }
-            });
-        </script>
+            th {
+                border-bottom: 1px solid #d4d4d4;
+            }
+        </style>
+
     </head>
 {% endblock header %}
 {% block content %}
@@ -44,7 +36,7 @@
     <div><br><br>
         <figure class="text-center">
             <blockquote class="blockquote">
-                <p>别想一下造出大海，必须先由小河川开始。</p>
+                <h3>别想一下造出大海，必须先由小河川开始!</h3>
             </blockquote>
             <figcaption class="blockquote-footer">
                 Z&Z<cite title="Source Title">记账</cite>
@@ -52,25 +44,67 @@
         </figure>
     </div>
     <span class="border border-4">2021年3月</span>
-    <div class="datalist">
-        <table class="table" id=dt>
-            <tr>
-                <td>类型</td>
-                <td>时间</td>
-                <td>分类</td>
-                <td>金额</td>
-            </tr>
-        </table>
-    </div>
 
     <div class="alert alert-primary" role="alert">
-        本月总支出：
+        本月总支出:
     </div>
     <div class="alert alert-success" role="alert">
-        本月总收入：
+        本月总收入:
     </div>
-    <button type="button" class="btn btn-outline-success" onclick="window.location='{% url "ledger:record" %}'">记一笔
+    <button type="button" class="btn btn-outline-success" onclick="window.location='{% url "ledger:record" %}'">
+        记一笔
     </button>
     </body>
+
+    <script>
+        $.ajax({
+            url: "http://127.0.0.1:8000/../../static/data/bill.csv",
+            dataType: 'text',  //指定服务器返回的数据类型
+            success: function (data) {
+                console.log(data);
+            },
+            error: function () {
+                console.log("error:");
+            },
+            complete: function () {
+                console.log("始终执行!");
+            }
+        }).done(successFunction);
+
+        function successFunction(data) {
+            var allRows = data.split(/\r?\n|\r/);  //查找换行和回车
+            var table = '<table>';
+            for (var singleRow = 0; singleRow < allRows.length; singleRow++) {
+                if (singleRow === 0) {
+                    table += '<thead>';
+                    table += '<tr>';
+                } else {
+                    table += '<tr>';
+                }
+                var rowCells = allRows[singleRow].split(',');  //以逗号分割
+                for (var rowCell = 0; rowCell < rowCells.length; rowCell++) {
+                    if (singleRow === 0) {
+                        table += '<th>';
+                        table += rowCells[rowCell];
+                        table += '</th>';
+                    } else {
+                        table += '<td>';
+                        table += rowCells[rowCell];
+                        table += '</td>';
+                    }
+                }
+                if (singleRow === 0) {
+                    table += '</tr>';
+                    table += '</thead>';
+                    table += '<tbody>';
+                } else {
+                    table += '</tr>';
+                }
+            }
+            table += '</tbody>';
+            table += '</table>';
+            $('body').append(table);
+        }
+    </script>
     </html>
 {% endblock content %}
