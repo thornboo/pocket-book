@@ -42,7 +42,8 @@
                 Z&Z<cite title="Source Title">记账</cite>
             </figcaption>
         </figure>
-    </div><br><br>
+    </div>
+    <br><br>
 
     <div class="userlist">
         <table id="ut">
@@ -58,54 +59,120 @@
     <span class="border border-4">2021年3月</span>
 
     <div class="alert alert-primary" role="alert">
-        本月总支出:
+        <p id="sr"></p>
     </div>
     <div class="alert alert-success" role="alert">
-        本月总收入:
+        <p id="zc"></p>
     </div>
     <button type="button" class="btn btn-outline-success" onclick="window.location='{% url "ledger:record" %}'">
         记一笔
     </button>
+    <br><br>
+    <div>
+        <span>注：&nbsp;类型有且只有两种值：1 代表收入，0 代表支出。</span>
+    </div>
+    <br>
     </body>
 
 
-{#第一种方法#}
+    {#第一种解析数据方法#}
     <script type="text/javascript">
 
         mtr = document.getElementById("ut");
 
+        var spending = 0;
+        var income = 0;
+        var month = 7;
+
         //使用ajax加载csv文件的数据
         $.ajax({
-            url: "http://127.0.0.1:8000/static/data/bill.csv",
+            url: "static/data/bill.csv",
             success: function (result) {
                 frag = document.createDocumentFragment();
 
                 // 对csv文件的数据先以行分割
                 userList = result.split("\n");
 
-                // 我们在对每一行以逗号作分割
+                // 我们再对每一行以逗号作分割
                 for (var i = 0; i < userList.length; i++) {
                     userary = userList[i].split(",");
                     tr = document.createElement("tr");
 
                     // 对每行的内容遍历到td标签去
                     for (j = 0; j < userary.length; j++) {
+                        if (i === 0) {  //去除csv文件第一行数据
+                            break
+                        }
+
+                        if (j === 0) {
+                            date = Number.parseInt(userary[1])  //字符串转化为数字
+                            var val = new Date(date),
+                                v = val.getMonth() + 1;
+                            if (v !== month) {
+                                break
+                            }
+                        }
+
+                        //当遍历到时间时进行格式转换处理
+                        if (j === 1) {
+                            date = Number.parseInt(userary[j])  //字符串转化为数字
+                            var now = new Date(date),
+                                y = now.getFullYear(),
+                                m = now.getMonth() + 1,
+                                d = now.getDate();
+                            userary[j] = y + "-" + (m < 10 ? "0" + m : m) + "-" + (d < 10 ? "0" + d : d) + " " + now.toTimeString().substr(0, 8);   //获取正常日期
+                        }
+
+                        //计算收入支出总和
+                        if (j === 3) {
+                            if (userary[0] === "0") { //支出
+                                userary[j] = Number.parseInt(userary[j]);
+                                spending = spending + userary[j];
+                            }
+                            if (userary[0] === "1") { //收入
+                                userary[j] = Number.parseInt(userary[j]);
+                                income = income + userary[j];
+                            }
+                        }
+
                         td = document.createElement("td");
                         td.append(userary[j]);
                         tr.appendChild(td);
                     }
                     frag.appendChild(tr);
                 }
-
                 // 加载到web页面
                 mtr.appendChild(frag);
-            }
+            },
+
+            error: function () {
+                console.log("error!");
+            },
         });
 
+
+        function function_sr() {
+            document.getElementById('sr').innerHTML = "本月总收入: " + income + "元";
+        }
+
+        function function_zc() {
+            document.getElementById('zc').innerHTML = "本月总支出: " + spending + "元";
+        }
+
+        //通过选择月份改变value的值
+        function function_filter(temp) {
+            month = temp;
+        }
+
+        //网页一加载就调用函数
+        window.onload = function () {
+            function_sr();
+            function_zc();
+        }
     </script>
 
 
-{#第二种方法#}
+    {#第二种解析数据方法#}
     {#    <script>#}
     {#        $.ajax({#}
     {#            url: "http://127.0.0.1:8000/static/data/bill.csv",#}
