@@ -6,29 +6,8 @@
     <head>
         <meta charset="UTF-8">
         <title>记账本</title>
+        <link rel="stylesheet" href="../../static/css/index.css" type="text/css">
         <script src="../../static/bootstrap/jQuery/jquery-3.6.0.js" type="text/javascript"></script>
-
-        <style>
-            table {
-                margin: 0 auto;
-                text-align: center;
-                border-collapse: collapse;
-                border: 1px solid #d4d4d4;
-            }
-
-            tr:nth-child(even) {
-                background: #d4d4d4;
-            }
-
-            th, td {
-                padding: 10px 70px;
-            }
-
-            th {
-                border-bottom: 1px solid #d4d4d4;
-            }
-        </style>
-
     </head>
 {% endblock header %}
 {% block content %}
@@ -55,9 +34,7 @@
             </tr>
         </table>
     </div>
-
-    <span class="border border-4">2021年3月</span>
-
+    <br><br>
     <div class="alert alert-primary" role="alert">
         <p id="sr"></p>
     </div>
@@ -74,6 +51,25 @@
     <br>
     </body>
 
+    <script>
+        var categories = {};
+        $.ajax({
+            url: "static/data/categories.csv",
+            success: function (result) {
+
+                TypeList = result.split("\n");
+
+                for (var i = 0; i < TypeList.length; i++) {
+                    ary = TypeList[i].split(",");
+                    categories[ary[0]] = ary[2];
+                }
+            },
+            error: function () {
+                console.log("error!");
+            }
+        })
+    </script>
+
 
     {#第一种解析数据方法#}
     <script type="text/javascript">
@@ -82,11 +78,11 @@
 
         var spending = 0;
         var income = 0;
-        var month = 7;
+        var month = 12;
 
         //使用ajax加载csv文件的数据
         $.ajax({
-            url: "static/data/bill.csv",
+            url: "static/data/bills.csv",
             success: function (result) {
                 frag = document.createDocumentFragment();
 
@@ -105,11 +101,18 @@
                         }
 
                         if (j === 0) {
+                            //判断是否为当前选择的月份
                             date = Number.parseInt(userary[1])  //字符串转化为数字
                             var val = new Date(date),
                                 v = val.getMonth() + 1;
                             if (v !== month) {
                                 break
+                            }
+                            if (userary[j] === "0") {
+                                userary[j] = "支出";
+                            }
+                            if (userary[j] === "1") {
+                                userary[j] = "收入";
                             }
                         }
 
@@ -120,21 +123,30 @@
                                 y = now.getFullYear(),
                                 m = now.getMonth() + 1,
                                 d = now.getDate();
-                            userary[j] = y + "-" + (m < 10 ? "0" + m : m) + "-" + (d < 10 ? "0" + d : d) + " " + now.toTimeString().substr(0, 8);   //获取正常日期
+                            userary[j] = y + "-" + (m < 10 ? "0" + m : m) + "-" + (d < 10 ? "0" + d : d) + " " +
+                                now.toTimeString().substr(0, 8);
+                        }
+
+                        //当遍历到类型时进行转换
+                        if (j === 2) {
+                            for (var key in categories) {
+                                if (userary[j] === key) {
+                                    userary[j] = categories[key];
+                                }
+                            }
                         }
 
                         //计算收入支出总和
                         if (j === 3) {
-                            if (userary[0] === "0") { //支出
+                            if (userary[0] === "支出") { //支出
                                 userary[j] = Number.parseInt(userary[j]);
                                 spending = spending + userary[j];
                             }
-                            if (userary[0] === "1") { //收入
+                            if (userary[0] === "收入") { //收入
                                 userary[j] = Number.parseInt(userary[j]);
                                 income = income + userary[j];
                             }
                         }
-
                         td = document.createElement("td");
                         td.append(userary[j]);
                         tr.appendChild(td);
@@ -143,6 +155,8 @@
                 }
                 // 加载到web页面
                 mtr.appendChild(frag);
+                document.getElementById('sr').innerHTML = "本月总收入: " + income + "元";
+                document.getElementById('zc').innerHTML = "本月总支出: " + spending + "元";
             },
 
             error: function () {
@@ -150,78 +164,64 @@
             },
         });
 
-
-        function function_sr() {
-            document.getElementById('sr').innerHTML = "本月总收入: " + income + "元";
-        }
-
-        function function_zc() {
-            document.getElementById('zc').innerHTML = "本月总支出: " + spending + "元";
-        }
-
         //通过选择月份改变value的值
         function function_filter(temp) {
             month = temp;
-        }
-
-        //网页一加载就调用函数
-        window.onload = function () {
-            function_sr();
-            function_zc();
+            location.reload(); //刷新页面
         }
     </script>
 
 
     {#第二种解析数据方法#}
     {#    <script>#}
-    {#        $.ajax({#}
-    {#            url: "http://127.0.0.1:8000/static/data/bill.csv",#}
-    {#            dataType: 'text',  //指定服务器返回的数据类型#}
-    {#            success: function (data) {#}
-    {#                console.log(data);#}
-    {#            },#}
-    {#            error: function () {#}
-    {#                console.log("error:");#}
-    {#            },#}
-    {#            complete: function () {#}
-    {#                console.log("始终执行!");#}
-    {#            }#}
-    {#        }).done(successFunction);#}
-    {##}
-    {#        function successFunction(data) {#}
-    {#            var allRows = data.split(/\r?\n|\r/);  //查找换行和回车#}
-    {#            var table = '<table>';#}
-    {#            for (var singleRow = 0; singleRow < allRows.length; singleRow++) {#}
-    {#                if (singleRow === 0) {#}
-    {#                    table += '<thead>';#}
-    {#                    table += '<tr>';#}
-    {#                } else {#}
-    {#                    table += '<tr>';#}
+    {#            $.ajax({#}
+    {#                url: "http://127.0.0.1:8000/static/data/bill.csv",#}
+    {#                dataType: 'text',  //指定服务器返回的数据类型#}
+    {#                success: function (data) {#}
+    {#                    console.log(data);#}
+    {#                },#}
+    {#                error: function () {#}
+    {#                    console.log("error:");#}
+    {#                },#}
+    {#                complete: function () {#}
+    {#                    console.log("始终执行!");#}
     {#                }#}
-    {#                var rowCells = allRows[singleRow].split(',');  //以逗号分割#}
-    {#                for (var rowCell = 0; rowCell < rowCells.length; rowCell++) {#}
+    {#            }).done(successFunction);#}
+    {##}
+    {#            function successFunction(data) {#}
+    {#                var allRows = data.split(/\r?\n|\r/);  //查找换行和回车#}
+    {#                var table = '<table>';#}
+    {#                for (var singleRow = 0; singleRow < allRows.length; singleRow++) {#}
     {#                    if (singleRow === 0) {#}
-    {#                        table += '<th>';#}
-    {#                        table += rowCells[rowCell];#}
-    {#                        table += '</th>';#}
+    {#                        table += '<thead>';#}
+    {#                        table += '<tr>';#}
     {#                    } else {#}
-    {#                        table += '<td>';#}
-    {#                        table += rowCells[rowCell];#}
-    {#                        table += '</td>';#}
+    {#                        table += '<tr>';#}
+    {#                    }#}
+    {#                    var rowCells = allRows[singleRow].split(',');  //以逗号分割#}
+    {#                    for (var rowCell = 0; rowCell < rowCells.length; rowCell++) {#}
+    {#                        if (singleRow === 0) {#}
+    {#                            table += '<th>';#}
+    {#                            table += rowCells[rowCell];#}
+    {#                            table += '</th>';#}
+    {#                        } else {#}
+    {#                            table += '<td>';#}
+    {#                            table += rowCells[rowCell];#}
+    {#                            table += '</td>';#}
+    {#                        }#}
+    {#                    }#}
+    {#                    if (singleRow === 0) {#}
+    {#                        table += '</tr>';#}
+    {#                        table += '</thead>';#}
+    {#                        table += '<tbody>';#}
+    {#                    } else {#}
+    {#                        table += '</tr>';#}
     {#                    }#}
     {#                }#}
-    {#                if (singleRow === 0) {#}
-    {#                    table += '</tr>';#}
-    {#                    table += '</thead>';#}
-    {#                    table += '<tbody>';#}
-    {#                } else {#}
-    {#                    table += '</tr>';#}
-    {#                }#}
+    {#                table += '</tbody>';#}
+    {#                table += '</table>';#}
+    {#                $('body').append(table);#}
     {#            }#}
-    {#            table += '</tbody>';#}
-    {#            table += '</table>';#}
-    {#            $('body').append(table);#}
-    {#        }#}
     {#    </script>#}
     </html>
 {% endblock content %}

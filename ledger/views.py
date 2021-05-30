@@ -10,12 +10,6 @@ def index(request):
 
 
 @login_required
-# 图表数据可视化
-def chart_overview(request):
-    return render(request, "ledger/chart_overview.html")
-
-
-@login_required
 # 展示所有账单信息
 def all_bills(request):
     return render(request, "ledger/all_bills.html")

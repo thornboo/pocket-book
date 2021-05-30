@@ -12,14 +12,48 @@
     <style>
         .a_btn {
             text-decoration: none;
-            color: inherit;
+            color: #333;
             font-weight: bolder;
         }
     </style>
+
+
+    <script type="text/javascript">
+        $(function () {
+            $(".dropdown-item").mouseover(function () {
+                $(this).children("select").show();
+            })
+            $(".dropdown-item").mouseout(function () {
+                $(this).children("select").hide();
+            })
+        })
+    </script>
+
+    <script type="text/javascript">
+        function showsubMenu(li) {
+            var submenu = li.getElementsByTagName("ul")[0];
+            submenu.style.display = "block";
+        }
+
+        function hidesubMenu(li) {
+            var submenu = li.getElementsByTagName("ul")[0];
+            submenu.style.display = "none";
+        }
+    </script>
+
+    <!-- 日历部分-->
+    <script src="../../static/laydate/laydate.js"></script>
+    <script>
+        lay('#version').html('-v' + laydate.v);
+        laydate.render({
+            elem: '#test1'
+        });
+    </script>
+
 </head>
 
 <body>
-<! --Static navbar -->
+<! -- 静态导航栏 -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
         <a class="navbar-brand" href="{% url "ledger:index" %}">Z&Z记账本</a>
@@ -27,22 +61,20 @@
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="{% url "ledger:index" %}">主页</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url "ledger:chart_overview" %}">图表</a>
-                </li>
+
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                       data-bs-toggle="dropdown" aria-expanded="false">
-                        月份
-                    </a>
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">月份</a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" onclick="function_filter(1)">一月</a></li>
-                        <li><a class="dropdown-item" onclick="function_filter(2)">二月</a></li>
+                        <li><a class=" dropdown-item" onclick="function_filter(2)">二月</a></li>
                         <li><a class="dropdown-item" onclick="function_filter(3)">三月</a></li>
                         <li><a class="dropdown-item" onclick="function_filter(4)">四月</a></li>
                         <li><a class="dropdown-item" onclick="function_filter(5)">五月</a></li>
@@ -55,13 +87,17 @@
                         <li><a class="dropdown-item" onclick="function_filter(12)">十二月</a></li>
                     </ul>
                 </li>
+
+                <input type="text" class="demo-input" placeholder="请选择日期..." id="test1">
+
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url "ledger:help" %}">FAQ常见问题</a>
+                    <a class="nav-link" href="{% url "ledger:help" %}">帮助</a>
                 </li>
             </ul>
+
             <form class="d-flex">
                 {% if user.is_authenticated %}
-                    你好,{{ user.username }}，
+                    你好,{{ user.username }},
                     <a href="{% url 'users:logout' %}" style="font-style: normal">注销</a>
                 {% else %}
                     <button type="button" class="btn btn-light"><a href="{% url "users:login" %}"

@@ -7,8 +7,6 @@ app_name = 'ledger'
 urlpatterns = [
     # 应用主页
     path('', views.index, name="index"),
-    # 图表展示
-    path('chart/', views.chart_overview, name="chart_overview"),
     # 展示所有账单信息
     path('all_bills/', views.all_bills, name="all_bills"),
     # 记一笔页面
