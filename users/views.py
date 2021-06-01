@@ -3,6 +3,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.contrib.auth import logout, authenticate  # 导入django自带的登陆验证模块
 from django.contrib.auth.forms import UserCreationForm
+from . import models
 
 
 def logout_view(request):
@@ -31,8 +32,18 @@ def register(request):
 
 def login(request):
     if request.method == "POST":
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        return HttpResponseRedirect('/index')
-
+        username = request.POST.get('username', None)
+        password = request.POST.get('password', None)
+        message = "所有字段都必须填写！"
+        if username and password:  # 确保用户名和密码都不为空
+            username = username.strip()
+            try:
+                user = models.users.objects.get(name=username)
+                if user.password == password:
+                    return HttpResponseRedirect('/index/')
+                else:
+                    message = "密码不正确！"
+            except:
+                message = "用户名不存在！"
+        return render(request, 'users/login.html', {"message": message})
     return render(request, 'users/login.html')

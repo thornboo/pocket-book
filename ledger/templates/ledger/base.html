@@ -62,7 +62,11 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+        {% if user.is_authenticated %}
+
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
                 <li class="nav-item">
@@ -95,21 +99,23 @@
                 </li>
             </ul>
 
-            <form class="d-flex">
-                {% if user.is_authenticated %}
-                    你好,{{ user.username }},
-                    <a href="{% url 'users:logout' %}" style="font-style: normal">注销</a>
-                {% else %}
-                    <button type="button" class="btn btn-light"><a href="{% url "users:login" %}"
-                                                                   class="a_btn">登录</a>
-                    </button>
-                    </a>
-                    &nbsp;
-                    <button type="button" class="btn btn-light"><a href="{% url "users:register" %}"
-                                                                   class="a_btn">注册</a>
-                    </button>
-                {% endif %}
-            </form>
+        {% endif %}
+
+        <form class="d-flex">
+            {% if user.is_authenticated %}
+                你好,{{ user.username }}，
+                <a href="{% url 'users:logout' %}" style="font-style: normal">注销</a>
+            {% else %}
+                <button type="button" class="btn btn-light"><a href="{% url "users:login" %}"
+                                                               class="a_btn">登录</a>
+                </button>
+                </a>
+                &nbsp;
+                <button type="button" class="btn btn-light"><a href="{% url "users:register" %}"
+                                                               class="a_btn">注册</a>
+                </button>
+            {% endif %}
+        </form>
         </div>
     </div>
 </nav>
