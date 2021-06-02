@@ -78,7 +78,11 @@
 
         var spending = 0;
         var income = 0;
-        var month = 12;
+
+        //获取当前时间
+        //var getDate = new Date();
+        //sessionStorage.month = getDate.getMonth();
+
 
         //使用ajax加载csv文件的数据
         $.ajax({
@@ -105,7 +109,15 @@
                             date = Number.parseInt(userary[1])  //字符串转化为数字
                             var val = new Date(date),
                                 v = val.getMonth() + 1;
-                            if (v !== month) {
+                            if (sessionStorage.month) {
+                                if (v !== Number.parseInt(sessionStorage.month)) {
+                                    break
+                                } else {
+                                }
+                            } else {
+                                var getDate = new Date(); //获取当前的月份
+                                sessionStorage.month = getDate.getMonth() + 1;
+                                console.log(sessionStorage.month);
                                 break
                             }
                             if (userary[j] === "0") {
@@ -166,7 +178,9 @@
 
         //通过选择月份改变value的值
         function function_filter(temp) {
-            month = temp;
+            if (typeof (Storage) !== "undefined") {
+                sessionStorage.month = temp;
+            }
             location.reload(); //刷新页面
         }
     </script>
