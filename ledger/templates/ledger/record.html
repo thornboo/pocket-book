@@ -30,7 +30,7 @@
 {% endblock header %}
 {% block content %}
     <body>
-    <form action="/form_submit/">
+    <form action="{% url "ledger:form_submit" %}">
         <div class="mb-3">
             <label for="time" class="form-label text-primary">日期</label>
             <br><input type="text" class="form-control" name="date" id="time">

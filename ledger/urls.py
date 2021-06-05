@@ -15,5 +15,5 @@ urlpatterns = [
     # 帮助页面
     path('FAQ/', views.help, name="help"),
     # 提交表单数据
-    path('form_submit/', form.form_submit),
+    path('form_submit/', form.form_submit, name="form_submit"),
 ]

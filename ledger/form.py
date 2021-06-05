@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.shortcuts import render
+from django.http import HttpResponseRedirect
 import time
 
 
@@ -33,4 +34,5 @@ def form_submit(request):
     f.write("\n")
     f.close()
 
-    return render(request, "ledger/index.html")
+    # return render(request, "ledger/index.html")
+    return HttpResponseRedirect('/')
