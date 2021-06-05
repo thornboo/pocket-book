@@ -6,13 +6,38 @@
     <head>
         <meta charset="UTF-8">
         <title>记账本</title>
-        <link rel="stylesheet" href="../../static/css/index.css" type="text/css">
         <script src="../../static/bootstrap/jQuery/jquery-3.6.0.js" type="text/javascript"></script>
     </head>
+
+    <style>
+        table {
+            margin: 0 auto;
+            text-align: center;
+            border-collapse: collapse;
+            border: 1px solid #d4d4d4;
+        }
+
+        tr:nth-child(even) {
+            background: #d4d4d4;
+        }
+
+        th, td {
+            padding: 10px 70px;
+        }
+
+        th {
+            border-bottom: 1px solid #d4d4d4;
+        }
+
+        .index {
+            background-color: #d4d4d4;
+        }
+    </style>
+
 {% endblock header %}
 {% block content %}
     <body>
-    <div style="background-color: #d4d4d4"><br><br>
+    <div class="index"><br><br>
         <figure class="text-center">
             <blockquote class="blockquote">
                 <h3>别想一下造出大海，必须先由小河川开始!</h3>
@@ -46,7 +71,8 @@
     </button>
     <br><br>
     <div>
-        <span>注：&nbsp;类型有且只有两种值：1 代表收入，0 代表支出。</span>
+        <span>请注意:<br>1、类型有且只有两种值：1 代表收入，0 代表支出。<br>
+        2、点击注销即可退出系统！</span>
     </div>
     <br>
     </body>
@@ -56,9 +82,7 @@
         $.ajax({
             url: "static/data/categories.csv",
             success: function (result) {
-
                 TypeList = result.split("\n");
-
                 for (var i = 0; i < TypeList.length; i++) {
                     ary = TypeList[i].split(",");
                     categories[ary[0]] = ary[2];
@@ -70,7 +94,6 @@
         })
     </script>
 
-
     {#第一种解析数据方法#}
     <script type="text/javascript">
 
@@ -78,11 +101,6 @@
 
         var spending = 0;
         var income = 0;
-
-        //获取当前时间
-        //var getDate = new Date();
-        //sessionStorage.month = getDate.getMonth();
-
 
         //使用ajax加载csv文件的数据
         $.ajax({
@@ -94,6 +112,7 @@
                 userList = result.split("\n");
 
                 // 我们再对每一行以逗号作分割
+                console.log(userList.length)
                 for (var i = 0; i < userList.length; i++) {
                     userary = userList[i].split(",");
                     tr = document.createElement("tr");
@@ -184,58 +203,5 @@
             location.reload(); //刷新页面
         }
     </script>
-
-
-    {#第二种解析数据方法#}
-    {#    <script>#}
-    {#            $.ajax({#}
-    {#                url: "http://127.0.0.1:8000/static/data/bill.csv",#}
-    {#                dataType: 'text',  //指定服务器返回的数据类型#}
-    {#                success: function (data) {#}
-    {#                    console.log(data);#}
-    {#                },#}
-    {#                error: function () {#}
-    {#                    console.log("error:");#}
-    {#                },#}
-    {#                complete: function () {#}
-    {#                    console.log("始终执行!");#}
-    {#                }#}
-    {#            }).done(successFunction);#}
-    {##}
-    {#            function successFunction(data) {#}
-    {#                var allRows = data.split(/\r?\n|\r/);  //查找换行和回车#}
-    {#                var table = '<table>';#}
-    {#                for (var singleRow = 0; singleRow < allRows.length; singleRow++) {#}
-    {#                    if (singleRow === 0) {#}
-    {#                        table += '<thead>';#}
-    {#                        table += '<tr>';#}
-    {#                    } else {#}
-    {#                        table += '<tr>';#}
-    {#                    }#}
-    {#                    var rowCells = allRows[singleRow].split(',');  //以逗号分割#}
-    {#                    for (var rowCell = 0; rowCell < rowCells.length; rowCell++) {#}
-    {#                        if (singleRow === 0) {#}
-    {#                            table += '<th>';#}
-    {#                            table += rowCells[rowCell];#}
-    {#                            table += '</th>';#}
-    {#                        } else {#}
-    {#                            table += '<td>';#}
-    {#                            table += rowCells[rowCell];#}
-    {#                            table += '</td>';#}
-    {#                        }#}
-    {#                    }#}
-    {#                    if (singleRow === 0) {#}
-    {#                        table += '</tr>';#}
-    {#                        table += '</thead>';#}
-    {#                        table += '<tbody>';#}
-    {#                    } else {#}
-    {#                        table += '</tr>';#}
-    {#                    }#}
-    {#                }#}
-    {#                table += '</tbody>';#}
-    {#                table += '</table>';#}
-    {#                $('body').append(table);#}
-    {#            }#}
-    {#    </script>#}
     </html>
 {% endblock content %}

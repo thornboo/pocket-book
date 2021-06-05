@@ -17,6 +17,15 @@
         }
     </style>
 
+    <script>
+        $(function () {
+            //防止页面后退
+            history.pushState(null, null, document.URL);
+            window.addEventListener('popstate', function () {
+                history.pushState(null, null, document.URL);
+            });
+        })
+    </script>
 
     <script type="text/javascript">
         $(function () {
@@ -56,7 +65,7 @@
 <! -- 静态导航栏 -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="{% url "ledger:index" %}">Z&Z记账本</a>
+        <a class="navbar-brand" >Z&Z记账本</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

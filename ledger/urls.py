@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 from . import views
+from . import form
 
 app_name = 'ledger'
 
@@ -13,4 +14,6 @@ urlpatterns = [
     path('record/', views.record, name="record"),
     # 帮助页面
     path('FAQ/', views.help, name="help"),
+    # 提交表单数据
+    path('form_submit/', form.form_submit),
 ]

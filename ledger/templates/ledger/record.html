@@ -1,4 +1,5 @@
 {% extends "ledger/base.html" %}
+{% load static %}
 {% block header %}
     <!DOCTYPE html>
     <html lang="zh">
@@ -6,52 +7,76 @@
         <meta charset="UTF-8">
         <title>记一笔</title>
         <script>
-            window.onload = function () {
-                //创建一个当bai前日期对象
-                var now = new Date();
-                //格式化日，如果小于9，前面补0
-                var day = ("0" + now.getDate()).slice(-2);
-                //格式化月，如果小于9，前面补0
-                var month = ("0" + (now.getMonth() + 1)).slice(-2);
-                //拼装完整日期格式
-                var today = now.getFullYear() + "-" + (month) + "-" + (day);
-                //完成赋值
-                $('#time').val(today);
-                console.log(day);
-                console.log(month);
-                console.log(today);
-            };
+            $.ajax({
+                url: "/static/data/categories.csv",
+                success: function (result) {
+                    TypeList = result.split("\n");
+                    for (var i = 1; i < TypeList.length; i++) {
+                        ary = TypeList[i].split(",");
+                        var opEle = document.createElement("option");
+                        opEle.innerHTML = ary[2];
+                        var sele = document.getElementById("category");
+                        sele.appendChild(opEle);
+                    }
+                },
+                error: function () {
+                    console.log("error!");
+                }
+            })
         </script>
+
+
     </head>
 {% endblock header %}
 {% block content %}
     <body>
-    <form>
+    <form action="/form_submit/">
         <div class="mb-3">
             <label for="time" class="form-label text-primary">日期</label>
-            <br><input type="date" name="course" id="time" value=""/>
+            <br><input type="text" class="form-control" name="date" id="time">
         </div>
-        <div class="mb-3">
-            <label for="money" class="form-label text-primary">金额</label>
-            <input type="text" class="form-control" id="money" aria-describedby="emailHelp">
-        </div>
+
         <div>
-            <label for="category" class="form-label text-primary">类别</label>
-            <select class="form-select" aria-label="Default select example" id="category">
-                <option selected>请选择...</option>
-                <option value="1">餐饮</option>
-                <option value="2">购物</option>
-                <option value="3">医疗</option>
+            <label for="sort" class="form-label text-primary">类别</label>
+            <select class="form-select" aria-label="Default select example" id="sort" name="sort" required>
+                <option selected="selected" disabled="disabled" style='display: none' value=''></option>
+                <option>收入</option>
+                <option>支出</option>
             </select>
         </div>
-        <br>
+
+        <div>
+            <label for="category" class="form-label text-primary">分类</label>
+            <select class="form-select" aria-label="Default select example" id="category" name="type" required>
+                <option selected="selected" disabled="disabled" style='display: none' value=''></option>
+            </select>
+        </div>
+
         <div class="mb-3">
-            <label for="notes" class="form-label text-primary">备注</label>
-            <input type="text" class="form-control" id="notes">
+            <label for="money" class="form-label text-primary">金额</label>
+            <input type="number" class="form-control" id="money" aria-describedby="emailHelp" name="money"
+                   required="required">
         </div>
 
         <button type="submit" class="btn btn-primary">保存</button>
     </form>
+
+    <script type="text/javascript">
+        function todayTime() {
+            var today = new Date();
+            var y = today.getFullYear();
+            var m = today.getMonth() + 1;
+            var d = today.getDate();
+            var H = today.getHours();
+            var M = today.getMinutes();
+            var S = today.getSeconds();
+            return y + "-" + (m < 10 ? "0" + m : m) + "-" + (d < 10 ? "0" + d : d) +
+                " " + (H < 10 ? "0" + H : H) + ":" + (M < 10 ? "0" + M : M) + ":" + (S < 10 ? "0" + S : S);
+        }
+
+        document.getElementById("time").value = todayTime();
+    </script>
+
     </body>
 {% endblock content %}
 </html>
