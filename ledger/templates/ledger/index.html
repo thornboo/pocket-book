@@ -220,10 +220,18 @@
         }
 
         function get_month() {
+            if (isNaN(sessionStorage.month)) {
+                var getMonth = new Date(); //获取当前的月份
+                sessionStorage.month = getMonth.getMonth();
+            }
             return Number.parseInt(sessionStorage.month)
         }
 
         function get_day() {
+            if (isNaN(sessionStorage.day)) {
+                var getDay = new Date(); //获取当前的号数
+                sessionStorage.day = getDay.getDate();
+            }
             return Number.parseInt(sessionStorage.day)
         }
 
