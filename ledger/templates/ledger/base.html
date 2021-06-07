@@ -73,7 +73,7 @@
 
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button"
-                       data-bs-toggle="dropdown" aria-expanded="false">月份</a>
+                       data-bs-toggle="dropdown" aria-expanded="false"></a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="height: 300px; overflow: auto">
                         <li><a class="dropdown-item" onclick="function_filter(1)">一月</a></li>
                         <li><a class=" dropdown-item" onclick="function_filter(2)">二月</a></li>
@@ -91,7 +91,7 @@
                 </li>
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button"
+                    <a class="nav-link dropdown-toggle" id="navbarDate" role="button"
                        data-bs-toggle="dropdown" aria-expanded="false">日期</a>
                     <ul id="date_ul" class="dropdown-menu" aria-labelledby="navbarDropdown"
                         style="height: 300px; overflow: auto">
@@ -146,6 +146,10 @@
         str += '<li><a class="dropdown-item" onclick="filter_day(' + value + ')">' + value + '</a></li>';
     }
     document.getElementById('date_ul').innerHTML = str;
+</script>
+<script>
+    document.getElementById('navbarDropdown').innerHTML = get_month() + "月";
+    document.getElementById('navbarDate').innerHTML = get_day() + "日";
 </script>
 </body>
 </html>
