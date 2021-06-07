@@ -50,22 +50,13 @@
         }
     </script>
 
-    <!-- 日历部分-->
-    <script src="../../static/laydate/laydate.js"></script>
-    <script>
-        lay('#version').html('-v' + laydate.v);
-        laydate.render({
-            elem: '#test1'
-        });
-    </script>
-
 </head>
 
 <body>
 <! -- 静态导航栏 -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-        <a class="navbar-brand" >Z&Z记账本</a>
+        <a class="navbar-brand">Z&Z记账本</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -83,7 +74,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button"
                        data-bs-toggle="dropdown" aria-expanded="false">月份</a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="height: 300px; overflow: auto">
                         <li><a class="dropdown-item" onclick="function_filter(1)">一月</a></li>
                         <li><a class=" dropdown-item" onclick="function_filter(2)">二月</a></li>
                         <li><a class="dropdown-item" onclick="function_filter(3)">三月</a></li>
@@ -99,7 +90,13 @@
                     </ul>
                 </li>
 
-                <input type="text" class="demo-input" placeholder="请选择日期..." id="test1">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">日期</a>
+                    <ul id="date_ul" class="dropdown-menu" aria-labelledby="navbarDropdown"
+                        style="height: 300px; overflow: auto">
+                    </ul>
+                </li>
 
                 <li class="nav-item">
                     <a class="nav-link" href="{% url "ledger:help" %}">帮助</a>
@@ -134,6 +131,21 @@
         {% block content %}{% endblock content %}
     </div>
 </div>
-<! --/.container -->
+<script>
+    m = get_month();
+    if (m === 1 || m === 3 || m === 5 || m === 7 || m === 8 || m === 10 || m === 12) {
+        month_num = 31;
+    } else if (m === 2) {
+        month_num = 28;
+    } else if (m === 4 || m === 6 || m === 9 || m === 11) {
+        month_num = 30;
+    }
+    var str = '';
+    for (var i = 0; i < month_num; i++) {
+        value = String(i + 1);
+        str += '<li><a class="dropdown-item" onclick="filter_day(' + value + ')">' + value + '</a></li>';
+    }
+    document.getElementById('date_ul').innerHTML = str;
+</script>
 </body>
 </html>

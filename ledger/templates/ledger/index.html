@@ -63,7 +63,7 @@
     <div class="alert alert-primary" role="alert">
         <p id="sr"></p>
     </div>
-    <div class="alert alert-success" role="alert">
+    <div class="alert alert-primary" role="alert">
         <p id="zc"></p>
     </div>
     <button type="button" class="btn btn-outline-success" onclick="window.location='{% url "ledger:record" %}'">
@@ -112,7 +112,6 @@
                 userList = result.split("\n");
 
                 // 我们再对每一行以逗号作分割
-                console.log(userList.length)
                 for (var i = 0; i < userList.length; i++) {
                     userary = userList[i].split(",");
                     tr = document.createElement("tr");
@@ -136,9 +135,26 @@
                             } else {
                                 var getDate = new Date(); //获取当前的月份
                                 sessionStorage.month = getDate.getMonth() + 1;
-                                console.log(sessionStorage.month);
                                 break
                             }
+
+                            //判断是否为当前选择的号数
+                            date = Number.parseInt(userary[1])  //字符串转化为数字
+                            var now_day = new Date(date),
+                                d = now_day.getDate();
+                            console.log("d的值为：" + d);
+
+                            if (sessionStorage.day) {
+                                if (d !== Number.parseInt(sessionStorage.day)) {
+                                    break
+                                } else {
+                                }
+                            } else {
+                                var getDay = new Date(); //获取当前的月份
+                                sessionStorage.day = getDay.getDate();
+                                break
+                            }
+
                             if (userary[j] === "0") {
                                 userary[j] = "支出";
                             }
@@ -199,6 +215,19 @@
         function function_filter(temp) {
             if (typeof (Storage) !== "undefined") {
                 sessionStorage.month = temp;
+            }
+            location.reload(); //刷新页面
+        }
+
+        function get_month() {
+            //console.log(Number.parseInt(sessionStorage.month));
+            return Number.parseInt(sessionStorage.month)
+        }
+
+        function filter_day(val) {
+            val = Number(val); ////使val为number型
+            if (typeof (Storage) !== "undefined") {
+                sessionStorage.day = val;
             }
             location.reload(); //刷新页面
         }
