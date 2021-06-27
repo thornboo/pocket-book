@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="../../static/bootstrap/bootstrap-5.0.0/css/bootstrap.css">
     <script src="../../static/bootstrap/jQuery/jquery-3.6.0.js"></script>
     <script src="../../static/bootstrap/bootstrap-5.0.0/js/bootstrap.bundle.js"></script>
+    <script src="../../static/laydate/laydate.js"></script>
     <style>
         .a_btn {
             text-decoration: none;
@@ -49,6 +50,15 @@
             submenu.style.display = "none";
         }
     </script>
+    <!-- 日历部分-->
+    <script src="../../static/laydate/laydate.js"></script>
+    <script>
+        laydate.render({
+            elem: '#test-range' //开始时间和结束时间所在 input 框的父选择器
+            //设置开始日期、日期日期的 input 选择器
+            , range: ['#startDate', '#endDate'] //数组格式为 layui 2.6.6 开始新增
+        });
+    </script>
 
 </head>
 
@@ -71,32 +81,43 @@
                     <a class="nav-link active" aria-current="page" href="{% url "ledger:index" %}">主页</a>
                 </li>
 
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button"
-                       data-bs-toggle="dropdown" aria-expanded="false"></a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="height: 300px; overflow: auto">
-                        <li><a class="dropdown-item" onclick="function_filter(1)">一月</a></li>
-                        <li><a class=" dropdown-item" onclick="function_filter(2)">二月</a></li>
-                        <li><a class="dropdown-item" onclick="function_filter(3)">三月</a></li>
-                        <li><a class="dropdown-item" onclick="function_filter(4)">四月</a></li>
-                        <li><a class="dropdown-item" onclick="function_filter(5)">五月</a></li>
-                        <li><a class="dropdown-item" onclick="function_filter(6)">六月</a></li>
-                        <li><a class="dropdown-item" onclick="function_filter(7)">七月</a></li>
-                        <li><a class="dropdown-item" onclick="function_filter(8)">八月</a></li>
-                        <li><a class="dropdown-item" onclick="function_filter(9)">九月</a></li>
-                        <li><a class="dropdown-item" onclick="function_filter(10)">十月</a></li>
-                        <li><a class="dropdown-item" onclick="function_filter(11)">十一月</a></li>
-                        <li><a class="dropdown-item" onclick="function_filter(12)">十二月</a></li>
-                    </ul>
-                </li>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <div class="layui-inline" id="test-range">
+                            <div class="layui-input-inline">
+                                <input type="text" id="startDate" class="layui-input" placeholder="开始日期">-><input
+                                    type="text" id="endDate" class="layui-input" placeholder="结束日期">
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDate" role="button"
-                       data-bs-toggle="dropdown" aria-expanded="false">日期</a>
-                    <ul id="date_ul" class="dropdown-menu" aria-labelledby="navbarDropdown"
-                        style="height: 300px; overflow: auto">
-                    </ul>
-                </li>
+{#                <li class="nav-item dropdown">#}
+{#                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button"#}
+{#                       data-bs-toggle="dropdown" aria-expanded="false"></a>#}
+{#                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="height: 300px; overflow: auto">#}
+{#                        <li><a class="dropdown-item" onclick="function_filter(1)">一月</a></li>#}
+{#                        <li><a class=" dropdown-item" onclick="function_filter(2)">二月</a></li>#}
+{#                        <li><a class="dropdown-item" onclick="function_filter(3)">三月</a></li>#}
+{#                        <li><a class="dropdown-item" onclick="function_filter(4)">四月</a></li>#}
+{#                        <li><a class="dropdown-item" onclick="function_filter(5)">五月</a></li>#}
+{#                        <li><a class="dropdown-item" onclick="function_filter(6)">六月</a></li>#}
+{#                        <li><a class="dropdown-item" onclick="function_filter(7)">七月</a></li>#}
+{#                        <li><a class="dropdown-item" onclick="function_filter(8)">八月</a></li>#}
+{#                        <li><a class="dropdown-item" onclick="function_filter(9)">九月</a></li>#}
+{#                        <li><a class="dropdown-item" onclick="function_filter(10)">十月</a></li>#}
+{#                        <li><a class="dropdown-item" onclick="function_filter(11)">十一月</a></li>#}
+{#                        <li><a class="dropdown-item" onclick="function_filter(12)">十二月</a></li>#}
+{#                    </ul>#}
+{#                </li>#}
+{##}
+{#                <li class="nav-item dropdown">#}
+{#                    <a class="nav-link dropdown-toggle" id="navbarDate" role="button"#}
+{#                       data-bs-toggle="dropdown" aria-expanded="false">日期</a>#}
+{#                    <ul id="date_ul" class="dropdown-menu" aria-labelledby="navbarDropdown"#}
+{#                        style="height: 300px; overflow: auto">#}
+{#                    </ul>#}
+{#                </li>#}
 
                 <li class="nav-item">
                     <a class="nav-link" href="{% url "ledger:help" %}">帮助</a>

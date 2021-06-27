@@ -34,5 +34,4 @@ def form_submit(request):
     f.write("\n")
     f.close()
 
-    # return render(request, "ledger/index.html")
     return HttpResponseRedirect('/')
