@@ -5,7 +5,7 @@
     <html lang="zh">
     <head>
         <meta charset="UTF-8">
-        <title>记账本</title>
+        <title>涂涂记账</title>
         <script src="../../static/bootstrap/jQuery/jquery-3.6.0.js" type="text/javascript"></script>
     </head>
 
@@ -32,22 +32,44 @@
         .index {
             background-color: #d4d4d4;
         }
+
+        .userlist {
+            float: left;
+        }
+
+        .aa {
+            float: right;
+            height: 60px;
+        }
+
+        .add_btn {
+            float: right;
+        }
+
+        .danger {
+            float: left;
+            margin-bottom: 0;
+        }
+
+        {#数据可视化CSS#}
+        canvas {
+            border: 1px solid #A4E2F9;
+        }
     </style>
 
 {% endblock header %}
 {% block content %}
     <body>
-    <div class="index"><br><br>
+    <div class="index"><br>
         <figure class="text-center">
             <blockquote class="blockquote">
                 <h3>别想一下造出大海，必须先由小河川开始!</h3>
             </blockquote>
             <figcaption class="blockquote-footer">
-                Z&Z<cite title="Source Title">记账</cite>
+                <cite title="Source Title">涂涂记账</cite>
             </figcaption>
         </figure>
     </div>
-    <br><br>
 
     <div class="userlist">
         <table id="ut">
@@ -59,18 +81,25 @@
             </tr>
         </table>
     </div>
-    <br><br>
-    <div class="alert alert-primary" role="alert">
+
+    <div height="300" width="400" style="margin-top:5px; margin-right:0; float:right;">
+        <canvas id="chart"> 你的浏览器不支持HTML5 canvas</canvas>
+    </div>
+
+    <br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+    <div class="alert alert-primary aa" role="alert">
         <p id="sr"></p>
     </div>
-    <div class="alert alert-primary" role="alert">
+    <div class="alert alert-primary aa" role="alert">
         <p id="zc"></p>
     </div>
-    <button type="button" class="btn btn-outline-success" onclick="window.location='{% url "ledger:record" %}'">
+    <br><br><br><br>
+    <button type="button" class="btn btn-outline-success add_btn" onclick="window.location='{% url "ledger:record" %}'">
         新增账单
     </button>
-    <br><br>
-    <div>
+
+    <div class="alert alert-danger danger">
         <span>请注意：点击注销才能完全退出系统！</span>
     </div>
     <br>
@@ -137,8 +166,8 @@
                                 break
                             }
 
-                            //判断是否为当前选择的号数
-                            date = Number.parseInt(userary[1])  //字符串转化为数字
+                            //检查是否为当前选择的号数（可注释掉）
+                            date = Number.parseInt(userary[1])
                             var now_day = new Date(date),
                                 d = now_day.getDate();
                             console.log("d的值为：" + d);
@@ -169,8 +198,8 @@
                                 y = now.getFullYear(),
                                 m = now.getMonth() + 1,
                                 d = now.getDate();
-                            userary[j] = y + "-" + (m < 10 ? "0" + m : m) + "-" + (d < 10 ? "0" + d : d) + " " +
-                                now.toTimeString().substr(0, 8);
+                            userary[j] = y + "-" + (m < 10 ? "0" + m : m) + "-" + (d < 10 ? "0" + d : d);
+                            // + " " + now.toTimeString().substr(0, 8); 加上具体时间
                         }
 
                         //当遍历到类型时进行转换
@@ -201,8 +230,8 @@
                 }
                 // 加载到web页面
                 mtr.appendChild(frag);
-                document.getElementById('sr').innerHTML = "本月总收入: " + income + "元";
-                document.getElementById('zc').innerHTML = "本月总支出: " + spending + "元";
+                document.getElementById('sr').innerHTML = "本月收入: " + income + "元";
+                document.getElementById('zc').innerHTML = "本月支出: " + spending + "元";
             },
 
             error: function () {
@@ -210,37 +239,232 @@
             },
         });
 
-        //通过选择月份改变value的值
-        function function_filter(temp) {
+        //通过选择月份改变value的值(temp为月份的数字)
+        function fifter_month(temp) {
             if (typeof (Storage) !== "undefined") {
                 sessionStorage.month = temp;
             }
             location.reload(); //刷新页面
         }
 
-        function get_month() {
-            if (isNaN(sessionStorage.month)) {
-                var getMonth = new Date(); //获取当前的月份
-                sessionStorage.month = getMonth.getMonth();
-            }
-            return Number.parseInt(sessionStorage.month)
-        }
-
-        function get_day() {
-            if (isNaN(sessionStorage.day)) {
-                var getDay = new Date(); //获取当前的号数
-                sessionStorage.day = getDay.getDate();
-            }
-            return Number.parseInt(sessionStorage.day)
-        }
-
-        function filter_day(val) {
-            val = Number(val); ////使val为number型
+        //(日期)var为具体日期的数字
+        function fifter_day(val) {
             if (typeof (Storage) !== "undefined") {
                 sessionStorage.day = val;
             }
             location.reload(); //刷新页面
         }
+
+    </script>
+    <!--数据可视化JS-->
+    <script type="text/javascript">
+        function goChart(dataArr) {
+
+            // 声明变量
+            let canvas, ctx;
+            // 图表属性
+            let cWidth, cHeight, cMargin, cSpace;
+            // 饼状图属性
+            let radius, ox, oy;//半径 圆心
+            let tWidth, tHeight;//图例宽高
+            let posX, posY, textX, textY;
+            let startAngle, endAngle;
+            var totleNb;
+            // 运动相关变量
+            let ctr, numctr, speed;
+            //鼠标移动
+            const mousePosition = {};
+
+            //线条和文字
+            let lineStartAngle, line, textPadding, textMoveDis;
+
+            // 获得canvas上下文
+            canvas = document.getElementById("chart");
+            if (canvas && canvas.getContext) {
+                ctx = canvas.getContext("2d");
+            }
+            initChart();
+
+            // 图表初始化
+            function initChart() {
+                // 图表信息
+                cMargin = 20;
+                cSpace = 40;
+
+                canvas.width = canvas.parentNode.getAttribute("width") * 2;
+                canvas.height = canvas.parentNode.getAttribute("height") * 2;
+                canvas.style.height = canvas.height / 2 + "px";
+                canvas.style.width = canvas.width / 2 + "px";
+                cHeight = canvas.height - cMargin * 2;
+                cWidth = canvas.width - cMargin * 2;
+
+                //饼状图信息
+                radius = cHeight * 2 / 6;  //半径  高度的2/6
+                ox = canvas.width / 2 + cSpace;  //圆心
+                oy = canvas.height / 2;
+                tWidth = 60; //图例宽和高
+                tHeight = 20;
+                posX = cMargin;
+                posY = cMargin;   //
+                textX = posX + tWidth + 15
+                textY = posY + 18;
+                startAngle = endAngle = 90 * Math.PI / 180; //起始弧度 结束弧度
+                rotateAngle = 0; //整体旋转的弧度
+
+                //将传入的数据转化百分比
+                totleNb = 0;
+                new_data_arr = [];
+                for (var i = 0; i < dataArr.length; i++) {
+                    totleNb += dataArr[i][0];
+                }
+                for (var i = 0; i < dataArr.length; i++) {
+                    new_data_arr.push(dataArr[i][0] / totleNb);
+                }
+                totalYNomber = 10;
+                // 运动相关
+                ctr = 1;//初始步骤
+                numctr = 50;//步骤
+                speed = 1.2; //毫秒 timer速度
+
+                //指示线 和 文字
+                lineStartAngle = -startAngle;
+                line = 40;         //画线的时候超出半径的一段线长
+                textPadding = 10;  //文字与线之间的间距
+                textMoveDis = 200; //文字运动开始的间距
+            }
+
+            drawMarkers();
+
+            //绘制比例图及文字
+            function drawMarkers() {
+                ctx.textAlign = "left";
+                for (var i = 0; i < dataArr.length; i++) {
+                    ctx.fillStyle = dataArr[i][1];
+                    ctx.fillRect(posX, posY + 40 * i, tWidth, tHeight);
+                    ctx.moveTo(posX, posY + 40 * i);
+                    ctx.font = 'normal 20px 微软雅黑';    //斜体 30像素 微软雅黑字体
+                    ctx.fillStyle = dataArr[i][1];
+                    var percent = dataArr[i][2] + "：" + parseInt(100 * new_data_arr[i]) + "%";
+                    ctx.fillText(percent, textX, textY + 40 * i);
+                }
+            };
+
+            //绘制动画
+            pieDraw();
+
+            function pieDraw(mouseMove) {
+
+                for (var n = 0; n < dataArr.length; n++) {
+                    ctx.fillStyle = ctx.strokeStyle = dataArr[n][1];
+                    ctx.lineWidth = 1;
+                    var step = new_data_arr[n] * Math.PI * 2; //旋转弧度
+                    var lineAngle = lineStartAngle + step / 2;   //计算线的角度
+                    lineStartAngle += step;//结束弧度
+
+                    ctx.beginPath();
+                    var x0 = ox + radius * Math.cos(lineAngle),//圆弧上线与圆相交点的x坐标
+                        y0 = oy + radius * Math.sin(lineAngle),//圆弧上线与圆相交点的y坐标
+                        x1 = ox + (radius + line) * Math.cos(lineAngle),//圆弧上线与圆相交点的x坐标
+                        y1 = oy + (radius + line) * Math.sin(lineAngle),//圆弧上线与圆相交点的y坐标
+                        x2 = x1,//转折点的x坐标
+                        y2 = y1,
+                        linePadding = ctx.measureText(dataArr[n][2]).width + 10; //获取文本长度来确定折线的长度
+
+                    ctx.moveTo(x0, y0);
+                    //对x1/y1进行处理，来实现折线的运动
+                    yMove = y0 + (y1 - y0) * ctr / numctr;
+                    ctx.lineTo(x1, yMove);
+                    if (x1 <= x0) {
+                        x2 -= line;
+                        ctx.textAlign = "right";
+                        ctx.lineTo(x2 - linePadding, yMove);
+                        ctx.fillText(dataArr[n][2], x2 - textPadding - textMoveDis * (numctr - ctr) / numctr, y2 - textPadding);
+                    } else {
+                        x2 += line;
+                        ctx.textAlign = "left";
+                        ctx.lineTo(x2 + linePadding, yMove);
+                        ctx.fillText(dataArr[n][2], x2 + textPadding + textMoveDis * (numctr - ctr) / numctr, y2 - textPadding);
+                    }
+                    ctx.stroke();
+                }
+
+                //设置旋转
+                ctx.save();
+                ctx.translate(ox, oy);
+                ctx.rotate((Math.PI * 2 / numctr) * ctr / 2);
+
+                //绘制一个圆圈
+                ctx.strokeStyle = "rgba(0,0,0," + 0.5 * ctr / numctr + ")"
+                ctx.beginPath();
+                ctx.arc(0, 0, (radius + 20) * ctr / numctr, 0, Math.PI * 2, false);
+                ctx.stroke();
+
+                for (var j = 0; j < dataArr.length; j++) {
+
+                    //绘制饼图
+                    endAngle = endAngle + new_data_arr[j] * ctr / numctr * Math.PI * 2; //结束弧度
+
+                    ctx.beginPath();
+                    ctx.moveTo(0, 0); //移动到到圆心
+                    ctx.arc(0, 0, radius * ctr / numctr, startAngle, endAngle, false); //绘制圆弧
+
+                    ctx.fillStyle = dataArr[j][1];
+                    if (mouseMove && ctx.isPointInPath(mousePosition.x * 2, mousePosition.y * 2)) {
+                        ctx.globalAlpha = 0.8;
+                    }
+
+                    ctx.closePath();
+                    ctx.fill();
+                    ctx.globalAlpha = 1;
+
+                    startAngle = endAngle; //设置起始弧度
+                    if (j === dataArr.length - 1) {
+                        startAngle = endAngle = 90 * Math.PI / 180; //起始弧度 结束弧度
+                    }
+                }
+
+                ctx.restore();
+
+                if (ctr < numctr) {
+                    ctr++;
+                    setTimeout(function () {
+                        ctx.clearRect(-canvas.width, -canvas.height, canvas.width * 2, canvas.height * 2);
+                        drawMarkers();
+                        pieDraw();
+                    }, speed *= 1.085);
+                }
+            }
+
+            //监听鼠标移动
+            var mouseTimer = null;
+            canvas.addEventListener("mousemove", function (e) {
+                e = e || window.event;
+                if (e.offsetX || e.offsetX === 0) {
+                    mousePosition.x = e.offsetX;
+                    mousePosition.y = e.offsetY;
+                } else if (e.layerX || e.layerX === 0) {
+                    mousePosition.x = e.layerX;
+                    mousePosition.y = e.layerY;
+                }
+
+                clearTimeout(mouseTimer);
+                mouseTimer = setTimeout(function () {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    drawMarkers();
+                    pieDraw(true);
+                }, 10);
+            });
+        }
+
+        const chartData = [
+            [8000, "#f32a2a", "车贷"],
+            [2000, "#4f19cd", "车辆保养"],
+            [5000, "#0c6599", "房屋租赁"],
+            [2030, "#3ca310", "家庭用品"],
+            [1000, "#c6920f", "交通"]];
+
+        goChart(chartData);
+
     </script>
     </html>
 {% endblock content %}

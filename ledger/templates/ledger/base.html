@@ -4,23 +4,61 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Z&Z记账本</title>
+    <title>涂涂记账</title>
     <!--引入bootstrap-->
     <link rel="stylesheet" href="../../static/bootstrap/bootstrap-5.0.0/css/bootstrap.css">
     <script src="../../static/bootstrap/jQuery/jquery-3.6.0.js"></script>
     <script src="../../static/bootstrap/bootstrap-5.0.0/js/bootstrap.bundle.js"></script>
     <script src="../../static/laydate/laydate.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
     <style>
         .a_btn {
             text-decoration: none;
             color: #333;
             font-weight: bolder;
         }
-    </style>
 
+        .cell {
+            height: 40px;
+            display: table-cell;
+            vertical-align: middle;
+        }
+
+        .pop {
+            width: 0;
+            position: fixed;
+            top: 60px;
+            right: 0;
+            background: #0d6efd;
+            word-break: break-all;
+            transition: width 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) 0s;
+        }
+
+        .Play_such {
+            border: solid #0d6efd; /*边框颜色*/
+            background: #ffffff; /* 背景颜色 */
+            z-index: 9988;
+            border-radius: 10px;
+        }
+    </style>
+    <!--侧边弹出栏-->
+    <script type="text/javascript">
+        function narrow() {
+            var isTrue = parseInt($('#clickSide').attr('value'));
+
+            if (isTrue == 0) {
+                $('.pop').css({'width': '200px'}); //弹出的宽度
+                $('#clickSide').attr('value', 1);
+            } else {
+                $('.pop').css({'width': '0'}); //收起时显示的宽度
+                $('#clickSide').attr('value', 0);
+            }
+            return false;
+        }
+    </script>
+    <!--防止页面后退-->
     <script>
         $(function () {
-            //防止页面后退
             history.pushState(null, null, document.URL);
             window.addEventListener('popstate', function () {
                 history.pushState(null, null, document.URL);
@@ -54,10 +92,37 @@
     <script src="../../static/laydate/laydate.js"></script>
     <script>
         laydate.render({
-            elem: '#test-range' //开始时间和结束时间所在 input 框的父选择器
-            //设置开始日期、日期日期的 input 选择器
-            , range: ['#startDate', '#endDate'] //数组格式为 layui 2.6.6 开始新增
+            elem: '#test-range'
+            , range: ['#startDate', '#endDate']
         });
+    </script>
+
+    <script>
+        var get_start_month;
+        var get_start_day;
+
+        //获取input框中的value值
+        function getInputVal() {
+            const StartInputBox = document.querySelectorAll('.start-input-a')[0];
+            const EndInputBox = document.querySelectorAll('.end-input-a')[0];
+            //以‘-’分割开始日期
+            var strstart = StartInputBox.value.split("-");
+            for (let i = 0; i < strstart.length; i++) {
+                var get_start_year = strstart[0];
+                get_start_month = strstart[1];
+                get_start_day = strstart[2];
+            }
+            fifter_month(get_start_month);
+            fifter_day(get_start_day);
+
+            //以‘-’分割结束日期
+            var strend = EndInputBox.value.split("-");
+            for (let i = 0; i < strend.length; i++) {
+                var get_end_year = strend[0];
+                var get_end_month = strend[1];
+                var get_end_day = strend[2];
+            }
+        }
     </script>
 
 </head>
@@ -66,7 +131,7 @@
 <! -- 静态导航栏 -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
-        <a class="navbar-brand">Z&Z记账本</a>
+        <a class="navbar-brand">涂涂记账</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -78,67 +143,62 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{% url "ledger:index" %}">主页</a>
-                </li>
+                    <button type="button" class="btn btn-primary"
+                            onclick="window.location.href = '{% url "ledger:index" %}'">主页
+                    </button>
+                </li>&nbsp;
+
+                <li class="nav-item">
+                    <button type="button" class="btn btn-primary"
+                            onclick="window.location.href = '{% url "ledger:help" %}'">帮助
+                    </button>
+                </li>&nbsp;
 
                 <div class="layui-form-item">
                     <div class="layui-inline">
-                        <div class="layui-inline" id="test-range">
-                            <div class="layui-input-inline">
-                                <input type="text" id="startDate" class="layui-input" placeholder="开始日期">-><input
-                                    type="text" id="endDate" class="layui-input" placeholder="结束日期">
-                            </div>
+                        <div class="layui-inline cell" id="test-range">
+                            <span class="layui-input-inline">
+                                <input type="text" id="startDate" class="layui-input start-input-a" placeholder="开始日期">
+                                <span class="layui-form-mid">-></span>
+                                <input type="text" id="endDate" class="layui-input end-input-a" placeholder="结束日期">
+                            </span>
                         </div>
                     </div>
-                </div>
-
-{#                <li class="nav-item dropdown">#}
-{#                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button"#}
-{#                       data-bs-toggle="dropdown" aria-expanded="false"></a>#}
-{#                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="height: 300px; overflow: auto">#}
-{#                        <li><a class="dropdown-item" onclick="function_filter(1)">一月</a></li>#}
-{#                        <li><a class=" dropdown-item" onclick="function_filter(2)">二月</a></li>#}
-{#                        <li><a class="dropdown-item" onclick="function_filter(3)">三月</a></li>#}
-{#                        <li><a class="dropdown-item" onclick="function_filter(4)">四月</a></li>#}
-{#                        <li><a class="dropdown-item" onclick="function_filter(5)">五月</a></li>#}
-{#                        <li><a class="dropdown-item" onclick="function_filter(6)">六月</a></li>#}
-{#                        <li><a class="dropdown-item" onclick="function_filter(7)">七月</a></li>#}
-{#                        <li><a class="dropdown-item" onclick="function_filter(8)">八月</a></li>#}
-{#                        <li><a class="dropdown-item" onclick="function_filter(9)">九月</a></li>#}
-{#                        <li><a class="dropdown-item" onclick="function_filter(10)">十月</a></li>#}
-{#                        <li><a class="dropdown-item" onclick="function_filter(11)">十一月</a></li>#}
-{#                        <li><a class="dropdown-item" onclick="function_filter(12)">十二月</a></li>#}
-{#                    </ul>#}
-{#                </li>#}
-{##}
-{#                <li class="nav-item dropdown">#}
-{#                    <a class="nav-link dropdown-toggle" id="navbarDate" role="button"#}
-{#                       data-bs-toggle="dropdown" aria-expanded="false">日期</a>#}
-{#                    <ul id="date_ul" class="dropdown-menu" aria-labelledby="navbarDropdown"#}
-{#                        style="height: 300px; overflow: auto">#}
-{#                    </ul>#}
-{#                </li>#}
+                </div>&nbsp;
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url "ledger:help" %}">帮助</a>
+                    <button type="button" class="btn btn-primary" onclick="getInputVal()">查询
+                    </button>
                 </li>
             </ul>
         {% endif %}
-
-        <form class="d-flex">
-            {% if user.is_authenticated %}
-                你好,{{ user.username }}，
-                <a href="{% url 'users:logout' %}" style="font-style: normal">注销</a>
-            {% else %}
-                <button type="button" class="btn btn-light"><a href="{% url "users:login" %}"
-                                                               class="a_btn">登录</a>
-                </button>
-                </a>
-                &nbsp;
-                <button type="button" class="btn btn-light"><a href="{% url "users:register" %}"
-                                                               class="a_btn">注册</a>
-                </button>
-            {% endif %}
+        {% if user.is_authenticated %}
+            <form class="d-flex">
+            <button id="clickSide" onclick="narrow()" type="button" class="btn btn-primary">{{ user.username }}</button>
+            <div class="pop">
+                <!--    弹出的内容-->
+                <div class="Play_such">用户名:</div>
+                <div class=Play_such>账号编号:</div>
+                <div class="Play_such">绑定电话:</div>
+                <div class="Play_such">邮箱:</div>
+                <div class="Play_such">
+                    <button type="button" class="btn btn-primary">修改密码
+                    </button>
+                    <button type="button" class="btn btn-primary"
+                            onclick="window.location.href = '{% url 'users:logout' %}'">注销
+                    </button>
+                </div>
+            </div>
+        {% else %}
+            <button type="button" class="btn btn-light"><a href="{% url "users:login" %}"
+                                                           class="a_btn">登录</a>
+            </button>
+            </a>
+            &nbsp;
+            <button type="button" class="btn btn-light"><a href="{% url "users:register" %}"
+                                                           class="a_btn">注册</a>
+            </button>
+        {% endif %}
         </form>
         </div>
     </div>
@@ -152,25 +212,5 @@
         {% block content %}{% endblock content %}
     </div>
 </div>
-<script>
-    m = get_month();
-    if (m === 1 || m === 3 || m === 5 || m === 7 || m === 8 || m === 10 || m === 12) {
-        month_num = 31;
-    } else if (m === 2) {
-        month_num = 28;
-    } else if (m === 4 || m === 6 || m === 9 || m === 11) {
-        month_num = 30;
-    }
-    var str = '';
-    for (var i = 0; i < month_num; i++) {
-        value = String(i + 1);
-        str += '<li><a class="dropdown-item" onclick="filter_day(' + value + ')">' + value + '</a></li>';
-    }
-    document.getElementById('date_ul').innerHTML = str;
-</script>
-<script>
-    document.getElementById('navbarDropdown').innerHTML = get_month() + "月";
-    document.getElementById('navbarDate').innerHTML = get_day() + "日";
-</script>
 </body>
 </html>
