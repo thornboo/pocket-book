@@ -10,23 +10,20 @@
     </head>
 
     <style>
-        table {
+        .ut-table {
+            width: 700px;
             margin: 0 auto;
             text-align: center;
             border-collapse: collapse;
             border: 1px solid #d4d4d4;
         }
 
-        tr:nth-child(even) {
-            background: #d4d4d4;
-        }
-
         th, td {
-            padding: 10px 70px;
+            padding: 5px 10px; /*td的边距高度和边距宽度设置*/
         }
 
-        th {
-            border-bottom: 1px solid #d4d4d4;
+        td {
+            background-color: #d4d4d4;
         }
 
         .index {
@@ -40,15 +37,11 @@
         .aa {
             float: right;
             height: 60px;
+            width: 200px;
         }
 
         .add_btn {
             float: right;
-        }
-
-        .danger {
-            float: left;
-            margin-bottom: 0;
         }
 
         {#数据可视化CSS#}
@@ -72,18 +65,18 @@
     </div>
 
     <div class="userlist">
-        <table id="ut">
+        <table id="ut" class="ut-table">
             <tr>
-                <td>类型</td>
-                <td>时间</td>
-                <td>分类</td>
-                <td>金额</td>
+                <th>类型</th>
+                <th>时间</th>
+                <th>分类</th>
+                <th>金额</th>
             </tr>
         </table>
     </div>
 
     <div height="300" width="400" style="margin-top:5px; margin-right:0; float:right;">
-        <canvas id="chart"> 你的浏览器不支持HTML5 canvas</canvas>
+        <canvas id="chart">你的浏览器不支持HTML5 canvas</canvas>
     </div>
 
     <br><br><br><br><br><br><br><br><br><br><br><br><br>
@@ -98,11 +91,6 @@
     <button type="button" class="btn btn-outline-success add_btn" onclick="window.location='{% url "ledger:record" %}'">
         新增账单
     </button>
-
-    <div class="alert alert-danger danger">
-        <span>请注意：点击注销才能完全退出系统！</span>
-    </div>
-    <br>
     </body>
 
     <script>
@@ -129,6 +117,8 @@
 
         var spending = 0;
         var income = 0;
+        var typeArray = []; //类型数组
+        var moneyArray = []; //各数据
 
         //使用ajax加载csv文件的数据
         $.ajax({
@@ -159,6 +149,17 @@
                                 if (v !== Number.parseInt(sessionStorage.month)) {
                                     break
                                 } else {
+                                    //将数据进行分类加和最后添加到饼状图中
+                                    let value_a = userary[2];
+                                    value_a = value_a.toString();
+                                    if (typeArray.indexOf(value_a) === -1) { //不存在的话就添加到数组
+                                        typeArray.push(value_a);
+                                        moneyArray.push(0);
+                                    } else { //indexOf方法：元素存在的话就返回元素的下标
+                                        let value_b = userary[3];
+                                        value_b = Number(value_b);
+                                        moneyArray[typeArray.indexOf(value_a)] = moneyArray[typeArray.indexOf(value_a)] + value_b;
+                                    }
                                 }
                             } else {
                                 var getDate = new Date(); //获取当前的月份
@@ -170,7 +171,6 @@
                             date = Number.parseInt(userary[1])
                             var now_day = new Date(date),
                                 d = now_day.getDate();
-                            console.log("d的值为：" + d);
 
                             if (sessionStorage.day) {
                                 if (d !== Number.parseInt(sessionStorage.day)) {
@@ -239,18 +239,24 @@
             },
         });
 
-        //通过选择月份改变value的值(temp为月份的数字)
-        function fifter_month(temp) {
+        //通过选择年份改变值(num为年份的数字)
+        function fifter_year(years) {
             if (typeof (Storage) !== "undefined") {
-                sessionStorage.month = temp;
+                sessionStorage.year = years;
             }
-            location.reload(); //刷新页面
+        }
+
+        //通过选择月份改变value的值(temp为月份的数字)
+        function fifter_month(month) {
+            if (typeof (Storage) !== "undefined") {
+                sessionStorage.month = month;
+            }
         }
 
         //(日期)var为具体日期的数字
-        function fifter_day(val) {
+        function fifter_day(days) {
             if (typeof (Storage) !== "undefined") {
-                sessionStorage.day = val;
+                sessionStorage.day = days;
             }
             location.reload(); //刷新页面
         }
@@ -456,14 +462,26 @@
             });
         }
 
+        //将类型和金额依次数据添加到单个数组中
+        const Datas = [];
+        for (let i = 0; i < moneyArray.length; ++i) {
+            Datas.push([moneyArray[i], "#f32a2a", typeArray[i]]);
+        }
+
+        {#console.log(Datas);#}
+        console.log(typeArray.length);
+        console.log(moneyArray.length);
+
         const chartData = [
             [8000, "#f32a2a", "车贷"],
             [2000, "#4f19cd", "车辆保养"],
             [5000, "#0c6599", "房屋租赁"],
             [2030, "#3ca310", "家庭用品"],
-            [1000, "#c6920f", "交通"]];
+            [1000, "#c6920f", "交通"]
+        ];
 
-        goChart(chartData);
+        goChart(Datas);
+        {#goChart(chartData);#}
 
     </script>
     </html>

@@ -10,7 +10,7 @@
     <script src="../../static/bootstrap/jQuery/jquery-3.6.0.js"></script>
     <script src="../../static/bootstrap/bootstrap-5.0.0/js/bootstrap.bundle.js"></script>
     <script src="../../static/laydate/laydate.js"></script>
-    <script type="text/javascript" src="http://code.jquery.com/jquery-latest.js"></script>
+    <script type="text/javascript" src="../../static/laydate/jquery-latest.js"></script>
     <style>
         .a_btn {
             text-decoration: none;
@@ -98,13 +98,15 @@
     </script>
 
     <script>
+        var StartInputBox;
+        var EndInputBox;
         var get_start_month;
         var get_start_day;
 
         //获取input框中的value值
         function getInputVal() {
-            const StartInputBox = document.querySelectorAll('.start-input-a')[0];
-            const EndInputBox = document.querySelectorAll('.end-input-a')[0];
+            StartInputBox = document.querySelectorAll('.start-input-a')[0];
+            EndInputBox = document.querySelectorAll('.end-input-a')[0];
             //以‘-’分割开始日期
             var strstart = StartInputBox.value.split("-");
             for (let i = 0; i < strstart.length; i++) {
@@ -122,6 +124,10 @@
                 var get_end_month = strend[1];
                 var get_end_day = strend[2];
             }
+
+            //在日期框中显示刚才选择的起始日期和结束日期（未完成）
+            document.getElementById('startDate').value = "start";
+            document.getElementById('endDate').value = "end";
         }
     </script>
 
@@ -136,7 +142,6 @@
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-
 
         {% if user.is_authenticated %}
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -177,12 +182,12 @@
             <button id="clickSide" onclick="narrow()" type="button" class="btn btn-primary">{{ user.username }}</button>
             <div class="pop">
                 <!--    弹出的内容-->
-                <div class="Play_such">用户名:</div>
-                <div class=Play_such>账号编号:</div>
-                <div class="Play_such">绑定电话:</div>
-                <div class="Play_such">邮箱:</div>
+                <div class="Play_such">用户名：{{ user.username }}</div>
+                <div class="Play_such">绑定手机：{{ user.phone }}</div>
+                <div class="Play_such">绑定邮箱：{{ user.email }}</div>
+                <div class="Play_such">邮箱：{{ user.email }}</div>
                 <div class="Play_such">
-                    <button type="button" class="btn btn-primary">修改密码
+                    <button type="button" class="btn btn-danger">修改密码
                     </button>
                     <button type="button" class="btn btn-primary"
                             onclick="window.location.href = '{% url 'users:logout' %}'">注销
