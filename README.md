@@ -1,45 +1,16 @@
-# pocket_book项目文档
+# Vue 3 + TypeScript + Vite
 
-## 简易记账本介绍
-#### 1、项目源地址：
-https://github.com/xmindltd/hiring/blob/master/frontend-1/README.md
+This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
 
-#### 2、所使用的技术：
-Django、Sqllite、Ajax、Bootstrap、Ecahrts、JS + CSS + HTML。
+## Recommended IDE Setup
 
-## 主要功能:
-1、能够实现用户登录验证，对不同的用户数据做数据隔离。<br>
-2、能够加载SCV文件数据到页面上展示，并且实时刷新。<br>
-3、以表格的形式展示账单内容，并且提供一个下拉框选择月份进行筛选，其中表格中所展示的账单为选择月份的账单。<br>
-4、支持随时随地的添加账单。<br>
-5、简单地使用饼状图来统计并展示所选月份的收入和支出总金额。<br>
+- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
 
-## 如何使用？
-#### 1、运行环境
-+ 操作系统：
-  + windows 10
-+ 项目依赖：
-  + ptyhon：3.8
-  + django：3.1.3
-  + sqlparse：0.4.2
-  + tzdata：2022.1
-  + asgiref：3.2.10
-  + pytz：2022.1
+## Type Support For `.vue` Imports in TS
 
+Since TypeScript cannot handle type information for `.vue` imports, they are shimmed to be a generic Vue component type by default. In most cases this is fine if you don't really care about component prop types outside of templates. However, if you wish to get actual prop types in `.vue` imports (for example to get props validation when using manual `h(...)` calls), you can enable Volar's Take Over mode by following these steps:
 
-#### 2、项目启动
-+ 首先需要安装python的 3.7~3.8 版本，以便和django的版本对应。
-+ 使用 ` pip freeze > requirments.txt ` 安装项目所使用的依赖包。
-+ 然后使用 ` python manage.py runserver ` 启动项目即可。
+1. Run `Extensions: Show Built-in Extensions` from VS Code's command palette, look for `TypeScript and JavaScript Language Features`, then right click and select `Disable (Workspace)`. By default, Take Over mode will enable itself if the default TypeScript extension is disabled.
+2. Reload the VS Code window by running `Developer: Reload Window` from the command palette.
 
-## 可能遇到的问题
-1. 启动时报错import 导入错误，可能是因为依赖未安装成功，可以尝试切换pip安装源重新安装。
-2. 本地已有的python高版本和项目的django版本不兼容，导致启动失败；可以搭建一个虚拟环境然后安装项目对应的python的版本即可解决。
-3. 新增账单数据之后表格未刷新；由于加载数据用的是ajax局部加载的方式来绘制到页面上，但是部分的ajax请求速度非常慢，导致页面数据无法显示，当前还未解决此问题。
-
-## 还需改进的地方
-1. 账单的数据加载还需优化，减少响应时长。
-2. 页面的UI欠缺美观。
-3. 对于添加新的账单时应该使用弹窗表单，而不是跳转到另一个页面表单填写。
-4. 对账单的处理太单调，只有一个时间区间筛选；没有参考值排序、更多的数据筛选功能。
-5. 没有合理的项目结构，当前结构比较杂乱。
+You can learn more about Take Over mode [here](https://github.com/johnsoncodehk/volar/discussions/471).
