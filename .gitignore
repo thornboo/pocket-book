@@ -1,3 +1,20 @@
+node_modules
+dist
+.DS_Store
+dist-ssr
+.npmrc
+.cache
+
+# tests files
+tests/server/static
+tests/server/static/upload
+
+# local
+*.local
+.env.local
+.env.*.local
+.eslintcache
+
 # Logs
 logs
 *.log
@@ -7,16 +24,10 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
-
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
 .idea
-.DS_Store
 *.suo
 *.ntvs*
 *.njsproj
