@@ -1,5 +1,6 @@
 import { UserConfig, ConfigEnv, loadEnv } from 'vite'
 import { resolve } from 'path'
+import vue from '@vitejs/plugin-vue'
 import moment from 'moment'
 import pkg from './package.json'
 
@@ -24,5 +25,37 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
   const root = process.cwd()
   const env = loadEnv(mode, root)
 
-  return {}
+  return {
+    base: '/',
+    root,
+    resolve: {
+      alias: [
+        // src设置别名@
+        {
+          find: /\/@\//,
+          replacement: pathResolve('src') + '/',
+        },
+        // types设置别名#
+        {
+          find: /\/#\//,
+          replacement: pathResolve('types') + '/',
+        },
+        // 解决vue-i18n的警告
+        {
+          find: 'vue-i18n',
+          replacement: 'vue-i18n/dist/vue-i18n.cjs.js',
+        },
+      ],
+    },
+    server: {
+      // 监听所有本地ip
+      host: true,
+      port: 3000,
+    },
+    plugins: [vue()],
+    optimizeDeps: {
+      include: [],
+      exclude: [],
+    },
+  }
 }
