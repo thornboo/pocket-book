@@ -1,5 +1,5 @@
 /**
- * commitLint配置文件
+ * commit 验证配置文件
  */
 module.exports = {
   ignores: [(commit) => commit.includes('init')],
@@ -33,4 +33,4 @@ module.exports = {
       ],
     ],
   },
-};
+}

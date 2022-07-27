@@ -1,19 +1,23 @@
+# 根目录的配置文件，编辑器会由当前目录向上查找，如果找到 `root = true` 的文件，则不再查找
 root = true
 
+# 匹配全部文件
 [*]
-charset=utf-8
-end_of_line=lf
-insert_final_newline=true
-indent_style=space
-indent_size=2
-max_line_length = 100
+charset = utf-8   # 文件编码
+end_of_line = crlf    # 结尾换行符，可选"lf"、"cr"、"crlf"
+insert_final_newline = true # 文件末尾添加一个空行
+indent_style = space  # 空格缩进,可选"space"、"tab"
+indent_size = 2 # 使用2个空格缩进
+max_line_length = 100   # 每行字符数
 
+# 匹配json类配置文件
 [*.{yml,yaml,json}]
-indent_style = space
-indent_size = 2
+indent_style = space # 空格缩进,可选"space"、"tab"
+indent_size = 2 # 使用2个空格缩进
 
+# 匹配md文件
 [*.md]
-trim_trailing_whitespace = false
+trim_trailing_whitespace = false    # 保留行末的空格
 
 [Makefile]
-indent_style = tab
+indent_style = tab  # 空格缩进,可选"space"、"tab"

@@ -10,4 +10,4 @@ module.exports = {
   proseWrap: 'never', // 因为使用了一些折行敏感型的渲染器
   htmlWhitespaceSensitivity: 'strict', // 对HTML中的结束标签结尾尖括号是否换到下一行
   endOfLine: 'auto', // 结束行格式
-};
+}

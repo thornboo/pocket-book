@@ -1,2 +1,8 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
+
+# npx 是npm的一个免安装工具，
+# 本质就是可以临时download执行某个二进制
+# --no-install的意思是使用node_modules中的commitlint包
+
+npx --no-install commitlint --edit "$1"
