@@ -1,0 +1,14 @@
+[
+  "生产环境",
+  {
+    "name": "husky",
+    "version": "",
+    "value": "git hook替代"
+  },
+  "开发环境",
+  {
+    "name": "",
+    "version": "",
+    "value": ""
+  }
+]

@@ -2,7 +2,6 @@ import { UserConfig, ConfigEnv, loadEnv } from 'vite'
 import { resolve } from 'path'
 import vue from '@vitejs/plugin-vue'
 import moment from 'moment'
-import pkg from './package.json'
 
 /**
  * 新增别名
@@ -13,8 +12,10 @@ function pathResolve(dir: string) {
   return resolve(process.cwd(), '.', dir)
 }
 
-// package信息
+// 获取package信息
+const pkg = require('./package.json')
 const { dependencies, devDependencies, name, version } = pkg
+
 const __APP_INFO__ = {
   pkg: { dependencies, devDependencies, name, version },
   lastBuildTime: moment().format('YYYY-MM-DD HH:mm:ss'),
