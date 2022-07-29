@@ -14,7 +14,10 @@
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "prepare": "husky install",
-    "commit": "cz"
+    "commit": "cz",
+    "lint:lint-staged": "lint-staged -c ./.husky/lintstagedrc.js",
+    "log": "conventional-changelog -p angular -i CHANGELOG.en_US.md -s",
+    "clean:lib": "rimraf node_modules"
   },
   "dependencies": {
     "@ant-design/colors": "^6.0.0",
