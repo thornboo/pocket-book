@@ -23,26 +23,28 @@ module.exports = {
     'subject-empty': [0],
     //type为空
     'type-empty': [0],
-    //
+    //subject 单词格式
     'subject-case': [0],
+    //scope为空
+    'scope-empty': [0],
     //type类型
     'type-enum': [
       2,
       'always',
       [
-        ':tada:init',
-        ':zap:feat',
-        ':bug:fix',
-        ':lipstick:style',
-        ':recycle:refactor',
-        ':bookmark:release',
-        ':rocket:deploy',
-        ':memo:docs',
-        ':white_check_mark:test',
-        ':wrench:chore',
-        ':rewind:revert',
-        ':package:add',
-        ':fire:del',
+        ':tada: init',
+        ':zap: feat',
+        ':bug: fix',
+        ':lipstick: style',
+        ':recycle: refactor',
+        ':bookmark: release',
+        ':rocket: deploy',
+        ':memo: docs',
+        ':white_check_mark: test',
+        ':wrench: chore',
+        ':rewind: revert',
+        ':package: add',
+        ':fire: del',
       ],
     ],
   },
