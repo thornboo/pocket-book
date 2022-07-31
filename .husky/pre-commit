@@ -1,7 +1,9 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
+[ -n "$CI" ] && exit 0
+
 # 检验当前提交的代码格式是否合格
 # 根据lintstagedrc.js配置格式化并提交代码
 
-# npm run lint:lint-staged
+ npm run lint:lint-staged

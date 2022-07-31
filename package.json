@@ -28,7 +28,7 @@
     "ant-design-vue": "^3.2.10",
     "axios": "^0.27.2",
     "echarts": "^5.3.3",
-    "gitmoji-cli": "^5.0.2",
+    "gitmoji-cli": "^5.0.3",
     "moment": "^2.29.4",
     "vue": "^3.2.37",
     "vue-i18n": "^9.1.10",

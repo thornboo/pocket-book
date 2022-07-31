@@ -26,11 +26,13 @@ module.exports = defineConfig({
   },
   // 添加更多通用规则集
   extends: [
-    'plugin:vue-pug/vue3-recommended',
+    'plugin:vue/vue3-recommended',
     'plugin:@typescript-eslint/recommended',
     'prettier',
     'plugin:prettier/recommended',
   ],
   // 在此处覆盖或添加规则设置
-  rules: {},
+  rules: {
+    '@typescript-eslint/no-var-requires': 'off',
+  },
 })

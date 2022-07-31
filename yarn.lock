@@ -3226,10 +3226,10 @@ gitconfiglocal@^1.0.0:
   dependencies:
     ini "^1.3.2"
 
-gitmoji-cli@^5.0.2:
-  version "5.0.2"
-  resolved "https://registry.npmmirror.com/gitmoji-cli/-/gitmoji-cli-5.0.2.tgz#ba1acb026fd94e8c8805a8a888269c9ae562a95c"
-  integrity sha512-gK2k/CRZWMVnFBhw/3NYDdxPOVIGnp+Jj1jM900qUHAv6NTwQa+7dOBdX8L6O5ySvr+C80mTfqNasGGwMPPHIw==
+gitmoji-cli@^5.0.3:
+  version "5.0.3"
+  resolved "https://registry.npmmirror.com/gitmoji-cli/-/gitmoji-cli-5.0.3.tgz#bb49db2b48c5ff28a1602bf004d06f3f84f998d7"
+  integrity sha512-tXni37GZ1tx3iiv7QhPGQcEkaRop71tUU0e3g9JcGY9t6FroJACD/QMwaefOFj1FjzX/kKbVoKG6qsKL1c8b7g==
   dependencies:
     chalk "4.1.0"
     conf "10.1.2"

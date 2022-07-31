@@ -5,4 +5,4 @@
 # --no-install的意思是使用node_modules中的commitlint包
 # 即使用commitlint.config.js配置文件检验msg是否合格
 
-#npx --no-install commitlint --edit "$1"
+npx --no-install commitlint --edit "$1"
